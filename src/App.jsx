@@ -58,22 +58,25 @@ function App() {
   };
 
   // ሁሉንም ተጠቃሚዎች ከ API ለማምጣት (አሁን በ App ውስጥ ነው)
-  const fetchAllUsers = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('https://fayda-mock-api.onrender.com/all-users');
-      const result = await res.json();
-      if (res.ok) {
-        setAllUsers(result.data);
-        setShowTable(!showTable); // ተጭነውት ከነበረ እንዲጠፋ፣ ከሌለ እንዲመጣ
-      }
-    } catch (err) {
-      alert("መረጃውን ማምጣት አልተቻለም");
-    } finally {
-      setLoading(false);
-    }
-  };
+ const fetchAllUsers = async () => {
+  setLoading(true);
+  try {
+    const res = await fetch('https://fayda-mock-api.onrender.com/all-users');
+    const result = await res.json();
+    
+    // ዳታው መኖሩን ለማረጋገጥ console ላይ ቼክ አድርግ
+    console.log("Fetched Data:", result);
 
+    if (res.ok && result.data) {
+      setAllUsers(result.data);
+      setShowTable(true);
+    }
+  } catch (err) {
+    alert("መረጃውን ማምጣት አልተቻለም");
+  } finally {
+    setLoading(false);
+  }
+};
   const handleLogout = () => {
     localStorage.removeItem('userToken');
     setIsLoggedIn(false);
