@@ -142,7 +142,7 @@ function App() {
     return (
       <div className="login-container">
         <div className="login-card scale-in">
-          <img src="https://fayda.et/wp-content/uploads/2022/02/NID-Logo-1.png" width="120" alt="Logo" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Flag_of_Ethiopia_%281975%E2%80%931987%29.svg/250px-Flag_of_Ethiopia_%281975%E2%80%931987%29.svg.png" />
           <h2>Fayda Verifier Login</h2>
           <form onSubmit={handleLogin}>
             <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} required />
@@ -158,7 +158,7 @@ function App() {
     <div className="app-layout">
       <nav className="top-nav">
         <div className="nav-brand">
-          <img src="https://fayda.et/wp-content/uploads/2022/02/NID-Logo-1.png" height="30" alt="Logo" />
+          <img src="https://play-lh.googleusercontent.com/tx1qrpGe0b6uBTadJqLqF64_HW-ehqnH_00J5L5CxjtDPu84eDgnDvSD5d9OTHe3Suw" height="30" alt="Logo" />
           <span>Fayda e-KYC Portal</span>
         </div>
         <div className="nav-actions">
