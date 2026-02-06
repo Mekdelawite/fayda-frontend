@@ -1,5 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+const [allUsers, setAllUsers] = useState([]);
+const [showTable, setShowTable] = useState(false);
+
+// ሁሉንም ተጠቃሚዎች ከ API ለማምጣት
+const fetchAllUsers = async () => {
+  setLoading(true);
+  try {
+    const res = await fetch('https://fayda-mock-api.onrender.com/all-users');
+    const result = await res.json();
+    if (res.ok) {
+      setAllUsers(result.data);
+      setShowTable(true);
+    }
+  } catch (err) {
+    alert("መረጃውን ማምጣት አልተቻለም");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
 function App() {
   // 1. Authentication States
@@ -255,6 +275,38 @@ function App() {
         </div>
       </div>
     </div>
+    <div className="all-users-section">
+  <button className="fetch-btn" onClick={fetchAllUsers}>
+    📊 View All Registered Citizens
+  </button>
+
+  {showTable && (
+    <div className="table-container scale-in">
+      <table className="modern-table">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Full Name</th>
+            <th>Fayda ID</th>
+            <th>Address</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allUsers.map((user, index) => (
+            <tr key={index} onClick={() => {setFaydaId(user.fayda_id); setShowTable(false);}}>
+              <td><img src={user.photo} alt="user" className="table-img" /></td>
+              <td><strong>{user.fullName}</strong></td>
+              <td><code>{user.fayda_id}</code></td>
+              <td>{user.address}</td>
+              <td><span className="status-badge">{user.status || 'Active'}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
   );
 }
 
