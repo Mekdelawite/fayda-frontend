@@ -1,317 +1,119 @@
-/* --- Ultra-Modern e-KYC Portal CSS --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+Ethiopic:wght@400;700&display=swap');
-
+/* --- Root Styles --- */
 :root {
-  --bg-color: #05070a;
-  --glass-bg: rgba(17, 25, 40, 0.85);
-  --primary: #00d2ff;
-  --secondary: #3a7bd5;
-  --text-white: #f8fafc;
-  --ethio-gold: #ffcc33;
-  --id-blue: #1c3d72;
-  --id-green: #28a745;
-  --id-red: #dc3545;
+  --fayda-blue: #1b3e71;
+  --fayda-gold: #ffcc33;
+  --bg-dark: #0f172a;
 }
 
 body {
-  margin: 0;
-  font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif;
-  background-color: var(--bg-color);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(0, 210, 255, 0.15) 0, transparent 50%), 
-    radial-gradient(at 100% 100%, rgba(58, 123, 213, 0.15) 0, transparent 50%);
-  color: var(--text-white);
-  min-height: 100vh;
-  overflow-x: hidden; /* እንዳይፈስ */
+  background-color: var(--bg-dark);
+  font-family: 'Inter', sans-serif;
+  color: white;
 }
 
-/* --- Global Elements --- */
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 25px;
-  padding: 40px;
-  max-width: 900px;
-  margin: 40px auto;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-}
+/* --- Login & App Layout --- */
+.login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; }
+.login-form { background: #1e293b; padding: 40px; border-radius: 20px; width: 300px; display: flex; flex-direction: column; gap: 15px; }
 
-input, select { /* Select Tag ጨምረናል */
-  width: 100%;
-  padding: 15px;
-  margin: 10px 0;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.top-nav { background: #1e293b; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+.glass-panel { max-width: 800px; margin: 40px auto; background: rgba(30, 41, 59, 0.7); padding: 30px; border-radius: 24px; backdrop-filter: blur(10px); }
+
+/* --- THE REAL FAYDA CARD DESIGN --- */
+.fayda-card {
+  width: 550px;
+  height: 350px;
+  background: white;
   border-radius: 12px;
-  color: white;
-  box-sizing: border-box;
-  font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif;
-  -webkit-appearance: none; /* ለ Select */
-  -moz-appearance: none; /* ለ Select */
-  appearance: none; /* ለ Select */
-  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-6.4H18.6c-5%200-9.3%201.8-13.2%205.7l-5.7%205.7a17.6%2017.6%200%200%200%200%2025.2l128%20128c5%204.9%2013.3%204.9%2018.2%200l128-128c5-4.9%205-13.1%200-18.2z%22%2F%3E%3C%2Fsvg%3E'); /* ለ Select */
-  background-repeat: no-repeat; /* ለ Select */
-  background-position: right 15px top 50%; /* ለ Select */
-  background-size: 12px auto; /* ለ Select */
-}
-
-input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
-
-button {
-  cursor: pointer;
-  padding: 14px 28px;
-  border-radius: 12px;
-  border: none;
-  font-weight: 700;
-  text-transform: uppercase;
-  transition: 0.4s;
-  background: linear-gradient(135deg, var(--secondary), var(--primary));
-  color: white;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 210, 255, 0.4); }
-
-.nav-actions, .input-group, .user-actions {
-  display: flex !important;
-  gap: 20px !important;
-  margin: 20px 0;
-}
-
-/* --- Login Screen --- */
-.login-screen {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.login-form {
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  padding: 50px;
-  border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.login-form h2 { font-size: 2rem; margin-bottom: 20px; background: linear-gradient(to right, #00d2ff, #3a7bd5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-
-/* --- Admin Panel Styling --- */
-.admin-panel {
-  text-align: left;
-  padding: 10px;
-}
-
-.admin-panel h3 {
-  color: var(--primary);
-  font-size: 1.5rem;
-  margin-bottom: 25px;
-  text-align: center;
-  border-bottom: 2px solid rgba(0, 210, 255, 0.2);
-  padding-bottom: 10px;
-}
-
-.admin-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-/* File Upload Group */
-.file-upload-group {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  transition: 0.3s;
-}
-
-.file-upload-group:hover {
-  border-color: var(--primary);
-  background: rgba(0, 210, 255, 0.05);
-}
-
-.file-upload-group label {
-  font-weight: 600;
-  color: #ddd;
-  margin-bottom: 10px;
-  display: block;
-}
-
-/* Custom File Input Styling */
-input[type="file"] {
-  background: none;
-  border: none;
-  padding: 0;
-  color: #888;
-  font-size: 14px;
-}
-
-input[type="file"]::file-selector-button {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  margin-right: 15px;
-  transition: 0.3s;
-}
-
-input[type="file"]::file-selector-button:hover {
-  background: var(--primary);
-  border-color: var(--primary);
-}
-
-/* Photo Preview */
-.photo-preview-container {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-top: 10px;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
-
-.preview-img {
-  width: 70px;
-  height: 70px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 2px solid var(--primary);
-}
-
-.preview-text {
-  font-size: 12px;
-  color: #28a745;
-  font-weight: bold;
-}
-
-/* Admin Submit Button */
-.admin-form button[type="submit"] {
-  margin-top: 10px;
-  background: linear-gradient(135deg, #28a745, #20c997); /* አረንጓዴ ከለር ለምዝገባ */
-  box-shadow: 0 10px 20px rgba(40, 167, 69, 0.2);
-}
-
-.admin-form button[type="submit"]:hover {
-  box-shadow: 0 10px 20px rgba(40, 167, 69, 0.4);
-}
-
-/* --- Modern User Card (Non-Printable Preview) --- */
-.modern-card {
-  background: rgba(255,255,255,0.05);
-  padding: 25px;
-  border-radius: 20px;
-  margin-bottom: 30px;
-}
-.card-content { display: flex; gap: 30px; align-items: center; }
-.modern-photo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
-.user-info h3 { margin: 0 0 5px 0; font-size: 1.8rem; }
-.user-info p { margin: 0 0 5px 0; font-size: 1.1rem; color: #ccc; }
-.status-badge {
-  background: #28a745;
-  color: white;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: bold;
-}
-
-/* --- Fayda ID Card for Printing (Exact Replica) --- */
-.id-card-to-print {
-  width: 600px; /* ስፋቱን ጨምረነዋል */
-  height: 380px; /* ቁመቱን ጨምረነዋል */
-  background: #fdfdfd;
-  border-radius: 15px;
-  margin: 30px auto;
+  overflow: hidden;
   position: relative;
   color: #1a1a1a;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  margin: 0 auto;
+}
+
+.card-header {
+  background: var(--fayda-blue);
+  color: white;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 4px solid var(--fayda-gold);
+}
+
+.emblem { width: 45px; margin-right: 12px; }
+.header-titles { flex: 1; }
+.header-titles .am { font-size: 14px; font-weight: bold; margin: 0; }
+.header-titles .en { font-size: 11px; margin: 0; opacity: 0.9; }
+.fayda-logo-top img { width: 40px; }
+
+.card-body {
+  padding: 15px;
+  display: flex;
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.citizen-photo {
+  width: 125px;
+  height: 155px;
+  object-fit: cover;
+  border-radius: 4px;
   border: 1px solid #ddd;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.citizen-details { flex: 1; text-align: left; }
+.detail-row { margin-bottom: 8px; }
+.detail-row label { font-size: 9px; color: #666; display: block; }
+.detail-row p { margin: 0; font-size: 13px; font-weight: bold; }
+
+.watermark-star {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
   background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/120px-Emblem_of_Ethiopia.svg.png');
   background-repeat: no-repeat;
-  background-position: 70% center; /* ወደ ቀኝ */
-  background-size: 200px; /* መጠኑን አስተካክለናል */
-  background-blend-mode: overlay;
-  background-color: rgba(255, 255, 255, 0.9);
-  display: flex;
-  flex-direction: column;
+  background-size: contain;
+  opacity: 0.08;
+  z-index: -1;
 }
 
-.id-card-header {
-  background: linear-gradient(to right, var(--id-blue), #2a5a9a); /* ሰማያዊ ግራዲየንት */
-  color: white;
-  padding: 10px 20px;
+.card-footer {
+  position: absolute;
+  bottom: 65px;
+  width: 100%;
+  padding: 0 15px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  border-bottom: 5px solid var(--ethio-gold); /* ከላይ ወርቃማ መስመር */
+  align-items: flex-end;
 }
 
-.id-card-header .eth-emblem { width: 50px; height: auto; margin-right: 15px; }
+.fcn-box { text-align: left; }
+.fcn-label { font-size: 14px; font-weight: bold; color: #b45309; margin-right: 8px; }
+.fcn-value { font-size: 16px; font-weight: bold; font-family: monospace; }
 
-.id-card-header .header-text { flex-grow: 1; text-align: left; }
-.id-card-header h4 { margin: 0; font-size: 14px; line-height: 1.3; font-weight: 700; }
-.id-card-header h4:last-child { font-weight: 400; font-size: 12px; }
+.digital-copy-tag { text-align: right; color: #059669; font-weight: bold; }
+.digital-copy-tag img { width: 40px; display: block; margin-left: auto; }
 
-.id-card-header .national-id-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: 20px;
+.bottom-barcode-area {
+  position: absolute;
+  bottom: 5px;
+  width: 100%;
+  text-align: center;
 }
-.id-card-header .national-id-logo img { width: 40px; height: auto; }
-.id-card-header .national-id-logo span { font-size: 10px; line-height: 1.2; text-align: right; }
+.bottom-barcode-area img { height: 35px; width: 80%; }
+.bottom-barcode-area p { margin: 0; font-size: 10px; font-family: monospace; }
 
+/* --- Admin Form --- */
+.admin-form { display: flex; flex-direction: column; gap: 15px; }
+.admin-form input, .admin-form select { padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; }
 
-.id-card-body-print {
-  display: flex;
-  padding: 20px;
-  flex-grow: 1; /* የቀረውን ቦታ እንዲይዝ */
-  position: relative;
-  overflow: hidden; /* Watermark እንዳይወጣ */
+/* Print Settings */
+@media print {
+  body * { visibility: hidden; }
+  #printable-card, #printable-card * { visibility: visible; }
+  #printable-card { position: absolute; left: 0; top: 0; }
 }
-
-.id-photo-large {
-  width: 140px; /* ትልቅ ፎቶ */
-  height: 170px;
-  object-fit: cover;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  margin-right: 25px;
-}
-
-.id-details-print {
-  flex: 1;
-  text-align: left;
-  font-size: 13px;
-}
-
-.id-details-print p { margin: 10px 0; line-height: 1.2; }
-
-.id-details-print .label-am {
-  color: #7a7a7a;
-  font-size: 11px;
-  font-weight: 400;
-  display: inline-block;
-  margin-right: 5px;
-}
-.id-details-print .label-en {
-  color: #7a7a7a;
-  font-size: 11px;
-  font-weight: 400;
-  display: inline-block;
