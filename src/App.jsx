@@ -1,27 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-
-const resizeAndConvert = (file) => {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const MAX_WIDTH = 400;
-        const scaleSize = MAX_WIDTH / img.width;
-        canvas.width = MAX_WIDTH;
-        canvas.height = img.height * scaleSize;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        resolve(canvas.toDataURL('image/jpeg', 0.8));
-      };
-    };
+const convertToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => resolve(fileReader.result);
+    fileReader.onerror = (error) => reject(error);
   });
 };
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
@@ -33,9 +19,13 @@ function App() {
   const [allUsers, setAllUsers] = useState([]);
   const [showTable, setShowTable] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
   const [isAdmin, setIsAdmin] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: '', email: '', dob: '', address: '', gender: 'Male', nationality: 'Ethiopian',
+    fullName: '',
+    email: '',
+    dob: '',
+    address: '',
     photo: `https://i.pravatar.cc/150?u=${Math.random()}`
   });
 
@@ -45,7 +35,15 @@ function App() {
     const token = localStorage.getItem('userToken');
     if (token) setIsLoggedIn(true);
   }, []);
-
+const handleFileUpload = async (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    setLoading(true);
+    const compressedBase64 = await resizeAndConvert(file);
+    setFormData({ ...formData, photo: compressedBase64 });
+    setLoading(false);
+  }
+};
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -56,23 +54,83 @@ function App() {
         body: JSON.stringify({ username, password })
       });
       const data = await res.json();
-      if (data.success) { setIsLoggedIn(true); localStorage.setItem('userToken', data.token); }
-      else { alert(data.message); }
-    } catch (err) { alert("Server Error!"); } finally { setLoading(false); }
+      if (data.success) {
+        setIsLoggedIn(true);
+        localStorage.setItem('userToken', data.token);
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      alert("ሰርቨሩ አልተነሳም!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchAllUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/all-users`);
+      const result = await res.json();
+      if (result.success) {
+        setAllUsers(result.data);
+        setShowTable(true);
+      }
+    } catch (err) {
+      alert("መረጃውን ማምጣት አልተቻለም");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVerify = async (idToVerify) => {
     const cleanId = (idToVerify || faydaId).replace(/\s/g, '');
-    setLoading(true); setError(''); setUserData(null);
+    setLoading(true);
+    setError('');
+    setUserData(null);
     try {
       const response = await fetch(`${API_BASE}/verify`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idNumber: cleanId })
       });
       const result = await response.json();
-      if (response.ok) { setUserData(result.data); }
-      else { setError('ተጠቃሚው አልተገኘም'); }
-    } catch (err) { setError('ግንኙነት ተቋርጧል'); } finally { setLoading(false); }
+      if (response.ok) {
+        setUserData(result.data);
+      } else {
+        setError('ተጠቃሚው አልተገኘም');
+      }
+    } catch (err) {
+      setError('ግንኙነት ተቋርጧል።');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdate = async (user) => {
+    const newName = prompt("አዲስ ስም ያስገቡ:", user.fullname);
+    const newAddress = prompt("አዲስ አድራሻ ያስገቡ:", user.address);
+    if (!newName && !newAddress) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/update-person/${user.fayda_id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          fullName: newName || user.fullname, 
+          address: newAddress || user.address 
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("መረጃው ተስተካክሏል!");
+        fetchAllUsers();
+      }
+    } catch (err) {
+      alert("ማስተካከያው አልተሳካም");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAdminAction = async (e) => {
@@ -80,122 +138,188 @@ function App() {
     setLoading(true);
     try {
       const response = await fetch(`${API_BASE}/add-person`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
       const result = await response.json();
-      if (result.success) { alert(`ተመዝግቧል! ID: ${result.fayda_id}`); setIsAdmin(false); handleVerify(result.fayda_id); }
-    } catch (err) { alert('ስህተት ተፈጥሯል'); } finally { setLoading(false); }
+      if (result.success) {
+        alert(`ተመዝግቧል! መታወቂያ ቁጥር፡ ${result.fayda_id}`);
+        setIsAdmin(false);
+        handleVerify(result.fayda_id);
+      }
+    } catch (err) {
+      alert('የሰርቨር ስህተት!');
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const filteredUsers = allUsers.filter(user => 
+    user.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    user.fayda_id?.includes(searchTerm)
+  );
+const resizeAndConvert = (file) => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 400; // የምስሉን ስፋት ወደ 400px ዝቅ ያደርገዋል
+        const scaleSize = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scaleSize;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // ጥራቱን ወደ 0.7 (70%) ዝቅ በማድረግ መጠኑን በጣም ይቀንሳል
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        resolve(dataUrl);
+      };
+    };
+  });
+};
+  
+  // --- Login Screen UI ---
   if (!isLoggedIn) {
     return (
       <div className="login-screen">
-        <form onSubmit={handleLogin} className="login-form">
+        <form onSubmit={handleLogin} className="login-form scale-in">
           <h2>Fayda Login</h2>
-          <input type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} required />
-          <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} required />
-          <button type="submit">{loading ? '...' : 'Login'}</button>
+          <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} required />
+          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
         </form>
       </div>
     );
   }
 
+  // --- Main App UI ---
   return (
     <div className="app-layout">
       <nav className="top-nav">
-        <div className="nav-brand">FAYDA e-KYC Portal</div>
+        <div className="nav-brand"><span>FAYDA e-KYC Portal</span></div>
         <div className="nav-actions">
-          <button onClick={() => setIsAdmin(!isAdmin)}>{isAdmin ? '🔍 Verify' : '⚙️ Admin'}</button>
+          <button onClick={() => setIsAdmin(!isAdmin)}>{isAdmin ? '🔍 Verify Mode' : '⚙️ Admin Mode'}</button>
           <button onClick={() => { localStorage.removeItem('userToken'); setIsLoggedIn(false); }}>Logout</button>
         </div>
       </nav>
 
       <div className="modern-app">
-        {!isAdmin ? (
-          <div className="glass-panel">
-            <div className="input-group">
-              <input type="text" placeholder="Enter Fayda ID" value={faydaId} onChange={(e) => setFaydaId(e.target.value)} />
-              <button onClick={() => handleVerify()}>Verify</button>
-            </div>
+        <div className="glass-panel scale-in">
+          {!isAdmin ? (
+            <div className="verification-section">
+              <div className="input-group">
+                <input type="text" placeholder="Enter Fayda ID" value={faydaId} onChange={(e) => setFaydaId(e.target.value)} />
+                <button onClick={() => handleVerify()} disabled={loading}>Verify Identity</button>
+              </div>
 
-            {userData && (
-              <div className="id-card-wrapper">
-                {/* --- REAL FAYDA ID DESIGN --- */}
-                <div className="fayda-card" id="printable-card">
-                  <div className="card-header">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/120px-Emblem_of_Ethiopia.svg.png" className="emblem" alt="ETH" />
-                    <div className="header-titles">
-                      <p className="am">የኢትዮጵያ ዲጂታል መታወቂያ ካርድ</p>
-                      <p className="en">Ethiopian Digital ID Card</p>
-                    </div>
-                    <div className="fayda-logo-top">
-                      <img src="https://fayda.ethid.et/img/logo_fayda.png" alt="Logo" />
+              {error && <div className="modern-error">{error}</div>}
+
+              {userData && (
+                <div className="verification-container scale-in">
+                  <div className="modern-card">
+                    <div className="card-content">
+                      <img src={userData.photo} alt="User" className="modern-photo" />
+                      <div className="user-info">
+                        <h3>{userData.fullname}</h3>
+                        <p><strong>ID:</strong> {userData.fayda_id}</p>
+                        <p><strong>Residence:</strong> {userData.address}</p>
+                        <div className="user-actions">
+                          <button className="print-btn" onClick={() => window.print()}>🖨️ Print ID Card</button>
+                          <span className="status-badge">{userData.status}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="card-body">
-                    <img src={userData.photo} className="citizen-photo" alt="Citizen" />
-                    <div className="citizen-details">
-                      <div className="detail-row">
-                        <label>ሙሉ ስም / First, Middle, Surname</label>
-                        <p className="val-am">{userData.fullname}</p>
-                        <p className="val-en">{userData.fullname}</p>
-                      </div>
-                      <div className="detail-row">
-                        <label>የትውልድ ቀን / Date of Birth</label>
-                        <p className="val-am">{userData.dob}</p>
-                      </div>
-                      <div className="detail-row">
-                        <label>ጾታ / SEX</label>
-                        <p className="val-am">{userData.gender || 'ወንድ / Male'}</p>
-                      </div>
-                      <div className="detail-row">
-                        <label>ዜግነት / Country of Citizenship</label>
-                        <p className="val-am">ኢትዮጵያ / Ethiopian</p>
+                  {/* Fayda ID Card for Printing */}
+                  <div className="id-card-to-print">
+                    <div className="id-card-header">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/120px-Emblem_of_Ethiopia.svg.png" alt="Emblem" />
+                      <div>
+                        <h4>FEDERAL DEMOCRATIC REPUBLIC OF ETHIOPIA</h4>
+                        <h4>NATIONAL DIGITAL ID (FAYDA)</h4>
                       </div>
                     </div>
-                    <div className="watermark-star"></div>
-                  </div>
-
-                  <div className="card-footer">
-                    <div className="fcn-box">
-                      <span className="fcn-label">FCN</span>
-                      <span className="fcn-value">{userData.fayda_id}</span>
+                    <div className="id-card-body">
+                      <img src={userData.photo} className="id-photo-small" alt="id-pic" />
+                      <div className="id-details">
+                        <p><span className="label">FULL NAME</span> <strong>{userData.fullname}</strong></p>
+                        <p><span className="label">DATE OF BIRTH</span> <strong>{userData.dob ? new Date(userData.dob).toLocaleDateString() : 'N/A'}</strong></p>
+                        <p><span className="label">RESIDENCE</span> <strong>{userData.address}</strong></p>
+                        <div className="id-number-tag">{userData.fayda_id}</div>
+                      </div>
                     </div>
-                    <div className="digital-copy-tag">
-                       <img src="https://fayda.ethid.et/img/logo_fayda.png" alt="f" />
-                       <span>Digital Copy</span>
+                    <div className="qr-code-id">
+                      <img src={`https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${userData.fayda_id}`} alt="qr" />
                     </div>
-                  </div>
-                  
-                  <div className="bottom-barcode-area">
-                    <img src={`https://bwipjs-cdn.micr.be/?bcid=code128&text=${userData.fayda_id}&scale=2&height=8`} alt="barcode" />
-                    <p>{userData.fayda_id}</p>
+                    <div className="id-card-footer"></div>
                   </div>
                 </div>
-                <button className="print-btn" onClick={() => window.print()}>🖨️ Print Card</button>
+              )}
+
+              <div className="all-users-section">
+                <div className="user-actions">
+                    <button className="fetch-btn" onClick={fetchAllUsers}>
+                    {showTable ? 'Refresh List' : '📊 View All Citizens'}
+                    </button>
+                </div>
+
+                {showTable && (
+                  <div className="table-container scale-in">
+                    <input type="text" placeholder="በስም ወይም በID ይፈልጉ..." className="search-bar" onChange={(e) => setSearchTerm(e.target.value)} />
+                    <table className="modern-table">
+                      <thead>
+                        <tr><th>Name</th><th>Fayda ID</th><th>Action</th></tr>
+                      </thead>
+                      <tbody>
+                        {filteredUsers.map((user, i) => (
+                          <tr key={i}>
+                            <td onClick={() => {setFaydaId(user.fayda_id); setShowTable(false); handleVerify(user.fayda_id);}} style={{cursor:'pointer'}}>{user.fullname}</td>
+                            <td>{user.fayda_id}</td>
+                            <td><button className="edit-btn" onClick={() => handleUpdate(user)}>📝 Edit</button></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        ) : (
-          <div className="glass-panel">
-            <h3>Register Citizen</h3>
-            <form onSubmit={handleAdminAction} className="admin-form">
-              <input type="text" placeholder="Full Name" onChange={e => setFormData({...formData, fullName: e.target.value})} required />
-              <input type="date" onChange={e => setFormData({...formData, dob: e.target.value})} required />
-              <select onChange={e => setFormData({...formData, gender: e.target.value})}>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-              <input type="file" accept="image/*" onChange={async (e) => {
-                const img = await resizeAndConvert(e.target.files[0]);
-                setFormData({...formData, photo: img});
-              }} required />
-              <button type="submit">Register</button>
-            </form>
-          </div>
-        )}
+            </div>
+          ) : (
+           // በ Admin Panel ክፍል ውስጥ ያለውን ፎርም በዚህ ተካው
+<div className="admin-panel scale-in">
+  <h3>Register New Citizen</h3>
+  <form onSubmit={handleAdminAction} className="admin-form">
+    <input type="text" placeholder="Full Name" required onChange={e => setFormData({...formData, fullName: e.target.value})} />
+    <input type="email" placeholder="Email Address" required onChange={e => setFormData({...formData, email: e.target.value})} />
+    <input type="date" required onChange={e => setFormData({...formData, dob: e.target.value})} />
+    <input type="text" placeholder="Address" required onChange={e => setFormData({...formData, address: e.target.value})} />
+    
+    <div className="file-upload-group">
+      <label>Citizen Identification Photo</label>
+      <input type="file" accept="image/*" onChange={handleFileUpload} required />
+      
+      {formData.photo && !formData.photo.includes('pravatar') && (
+        <div className="photo-preview-container">
+          <img src={formData.photo} alt="Preview" className="preview-img" />
+          <span className="preview-text">✓ Photo Selected</span>
+        </div>
+      )}
+    </div>
+
+    <button type="submit" disabled={loading}>
+      {loading ? 'Processing...' : '🚀 Register Citizen'}
+    </button>
+  </form>
+</div>
+          )}
+        </div>
       </div>
     </div>
   );
