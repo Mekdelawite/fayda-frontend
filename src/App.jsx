@@ -237,30 +237,82 @@ const resizeAndConvert = (file) => {
                     </div>
                   </div>
 
-                  {/* Fayda ID Card for Printing */}
-                  <div className="id-card-to-print">
-                    <div className="id-card-header">
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/120px-Emblem_of_Ethiopia.svg.png" alt="Emblem" />
-                      <div>
-                        <h4>FEDERAL DEMOCRATIC REPUBLIC OF ETHIOPIA</h4>
-                        <h4>NATIONAL DIGITAL ID (FAYDA)</h4>
-                      </div>
-                    </div>
-                    <div className="id-card-body">
-                      <img src={userData.photo} className="id-photo-small" alt="id-pic" />
-                      <div className="id-details">
-                        <p><span className="label">FULL NAME</span> <strong>{userData.fullname}</strong></p>
-                        <p><span className="label">DATE OF BIRTH</span> <strong>{userData.dob ? new Date(userData.dob).toLocaleDateString() : 'N/A'}</strong></p>
-                        <p><span className="label">RESIDENCE</span> <strong>{userData.address}</strong></p>
-                        <div className="id-number-tag">{userData.fayda_id}</div>
-                      </div>
-                    </div>
-                    <div className="qr-code-id">
-                      <img src={`https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${userData.fayda_id}`} alt="qr" />
-                    </div>
-                    <div className="id-card-footer"></div>
-                  </div>
-                </div>
+                  // ... ካለው ኮድ ውስጥ የ userData ካርድ ያለበትን ክፍል በዚህ ተካው
+
+{userData && (
+  <div id="print-area" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    {/* --- REAL FAYDA CARD START --- */}
+    <div style={{ width: '550px', height: '350px', background: 'white', borderRadius: '15px', overflow: 'hidden', position: 'relative', color: 'black', boxShadow: '0 15px 35px rgba(0,0,0,0.5)' }}>
+      
+      {/* Header */}
+      <div style={{ background: '#1b3e71', padding: '10px 20px', display: 'flex', alignItems: 'center', borderBottom: '4px solid #ffcc33', color: 'white' }}>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/120px-Emblem_of_Ethiopia.svg.png" width="45" alt="ETH" />
+        <div style={{ flex: 1, marginLeft: '15px', textAlign: 'left' }}>
+          <div style={{ fontSize: '14px', fontWeight: 'bold' }}>የኢትዮጵያ ዲጂታል መታወቂያ ካርድ</div>
+          <div style={{ fontSize: '11px' }}>Ethiopian Digital ID Card</div>
+        </div>
+        <img src="https://fayda.ethid.et/img/logo_fayda.png" width="40" alt="Logo" />
+      </div>
+
+      {/* Body */}
+      <div style={{ display: 'flex', padding: '20px', gap: '20px', textAlign: 'left', position: 'relative' }}>
+        {/* Watermark Star */}
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: 0.05, zIndex: 0 }}>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/500px-Emblem_of_Ethiopia.svg.png" width="250" alt="star" />
+        </div>
+
+        <img src={userData.photo} style={{ width: '130px', height: '165px', objectFit: 'cover', borderRadius: '5px', border: '1px solid #ddd', zIndex: 1 }} alt="p" />
+        
+        <div style={{ flex: 1, zIndex: 1 }}>
+          <div style={{ marginBottom: '10px' }}>
+            <small style={{ color: '#666', fontSize: '10px' }}>ሙሉ ስም / Full Name</small>
+            <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{userData.fullname}</div>
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <small style={{ color: '#666', fontSize: '10px' }}>የትውልድ ቀን / Date of Birth</small>
+            <div style={{ fontWeight: 'bold' }}>{userData.dob}</div>
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <small style={{ color: '#666', fontSize: '10px' }}>ጾታ / SEX</small>
+            <div style={{ fontWeight: 'bold' }}>{userData.gender || 'ወንድ / Male'}</div>
+          </div>
+          <div>
+            <small style={{ color: '#666', fontSize: '10px' }}>ዜግነት / Citizenship</small>
+            <div style={{ fontWeight: 'bold' }}>ኢትዮጵያ / Ethiopian</div>
+          </div>
+        </div>
+
+        {/* --- አዲሱ QR CODE እዚህ ጋር ተጨምሯል --- */}
+        <div style={{ zIndex: 1, textAlign: 'center' }}>
+          <img 
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=FaydaID:${userData.fayda_id}%0AName:${userData.fullname}`} 
+            alt="QR Code" 
+            style={{ border: '1px solid #eee', padding: '5px', background: 'white' }}
+          />
+          <div style={{ fontSize: '8px', color: '#666', marginTop: '2px' }}>SCAN TO VERIFY</div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{ position: 'absolute', bottom: '60px', width: '100%', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ fontSize: '18px', fontWeight: 'bold' }}><span style={{ color: '#b45309' }}>FCN</span> {userData.fayda_id}</div>
+        <div style={{ color: '#059669', textAlign: 'right', fontWeight: 'bold' }}>
+            <img src="https://fayda.ethid.et/img/logo_fayda.png" width="30" style={{ display: 'block', marginLeft: 'auto' }} />
+            Digital Copy
+        </div>
+      </div>
+
+      {/* Barcode */}
+      <div style={{ position: 'absolute', bottom: '5px', width: '100%', textAlign: 'center' }}>
+        <img src={`https://bwipjs-cdn.micr.be/?bcid=code128&text=${userData.fayda_id}&scale=2&height=8`} style={{ width: '80%', height: '35px' }} alt="barcode" />
+        <div style={{ fontSize: '10px', fontFamily: 'monospace' }}>{userData.fayda_id}</div>
+      </div>
+    </div>
+    {/* --- REAL FAYDA CARD END --- */}
+
+    <button onClick={() => window.print()} style={{ marginTop: '30px', padding: '12px 25px', borderRadius: '10px', background: '#28a745', border: 'none', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}>🖨️ Print ID Card</button>
+  </div>
+)}
               )}
 
               <div className="all-users-section">
