@@ -2,45 +2,38 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  // 1. Authentication States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  // 2. Verification & Table States
   const [faydaId, setFaydaId] = useState('');
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [history, setHistory] = useState([]);
-  const [allUsers, setAllUsers] = useState([]); // እዚህ መሆን አለበት
-  const [showTable, setShowTable] = useState(false); // እዚህ መሆን አለበት
+  const [allUsers, setAllUsers] = useState([]);
+  const [showTable, setShowTable] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(''); // ለፍለጋ የተጨመረ
 
-  // 3. Admin States
   const [isAdmin, setIsAdmin] = useState(false);
   const [formData, setFormData] = useState({
-    fayda_id: '',
     fullName: '',
+    email: '',
     dob: '',
     address: '',
-    gender: 'Male',
-    photo: 'https://i.pravatar.cc/150?u=' + Math.random()
+    photo: `https://i.pravatar.cc/150?u=${Math.random()}`
   });
 
-  // ገጹ ሲከፈት የቆየ Login እና History መኖሩን ቼክ ያደርጋል
+  const API_BASE = "https://fayda-mock-api.onrender.com";
+
   useEffect(() => {
     const token = localStorage.getItem('userToken');
     if (token) setIsLoggedIn(true);
-
-    const savedHistory = JSON.parse(localStorage.getItem('faydaHistory') || '[]');
-    setHistory(savedHistory);
   }, []);
 
-  // Login Logic
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const res = await fetch('https://fayda-mock-api.onrender.com/login', {
+      const res = await fetch(`${API_BASE}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -54,52 +47,34 @@ function App() {
       }
     } catch (err) {
       alert("ሰርቨሩ አልተነሳም!");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ሁሉንም ተጠቃሚዎች ከ API ለማምጣት (አሁን በ App ውስጥ ነው)
- const fetchAllUsers = async () => {
-  setLoading(true);
-  try {
-    const res = await fetch('https://fayda-mock-api.onrender.com/all-users');
-    const result = await res.json();
-    
-    // ዳታው መኖሩን ለማረጋገጥ console ላይ ቼክ አድርግ
-    console.log("Fetched Data:", result);
-
-    if (res.ok && result.data) {
-      setAllUsers(result.data);
-      setShowTable(true);
+  const fetchAllUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/all-users`);
+      const result = await res.json();
+      if (result.success) {
+        setAllUsers(result.data);
+        setShowTable(true);
+      }
+    } catch (err) {
+      alert("መረጃውን ማምጣት አልተቻለም");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    alert("መረጃውን ማምጣት አልተቻለም");
-  } finally {
-    setLoading(false);
-  }
-};
-  const handleLogout = () => {
-    localStorage.removeItem('userToken');
-    setIsLoggedIn(false);
-    setIsAdmin(false);
   };
 
-  const handleInputChange = (e) => {
-    const val = e.target.value.replace(/\D/g, '');
-    const formatted = val.match(/.{1,4}/g)?.join(' ') || val;
-    if (val.length <= 12) setFaydaId(formatted);
-  };
-
-  const handleVerify = async () => {
-    const cleanId = faydaId.replace(/\s/g, '');
-    if (cleanId.length !== 12) {
-      setError('እባክዎ 12 አሃዝ በትክክል ያስገቡ');
-      return;
-    }
+  const handleVerify = async (idToVerify) => {
+    const cleanId = (idToVerify || faydaId).replace(/\s/g, '');
     setLoading(true);
     setError('');
     setUserData(null);
     try {
-      const response = await fetch('https://fayda-mock-api.onrender.com/verify', {
+      const response = await fetch(`${API_BASE}/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idNumber: cleanId })
@@ -107,14 +82,40 @@ function App() {
       const result = await response.json();
       if (response.ok) {
         setUserData(result.data);
-        const newHistory = [result.data, ...history.filter(h => h.fayda_id !== cleanId)].slice(0, 5);
-        setHistory(newHistory);
-        localStorage.setItem('faydaHistory', JSON.stringify(newHistory));
       } else {
         setError('ተጠቃሚው አልተገኘም');
       }
     } catch (err) {
-      setError('የሰርቨር ግንኙነት ተቋርጧል።');
+      setError('ግንኙነት ተቋርጧል።');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- መረጃ ማስተካከያ (Update Logic) ---
+  const handleUpdate = async (user) => {
+    const newName = prompt("አዲስ ስም ያስገቡ:", user.fullname);
+    const newAddress = prompt("አዲስ አድራሻ ያስገቡ:", user.address);
+
+    if (!newName && !newAddress) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/update-person/${user.fayda_id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          fullName: newName || user.fullname, 
+          address: newAddress || user.address 
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("መረጃው ተስተካክሏል!");
+        fetchAllUsers(); // ዝርዝሩን ያድሳል
+      }
+    } catch (err) {
+      alert("ማስተካከያው አልተሳካም");
     } finally {
       setLoading(false);
     }
@@ -124,103 +125,92 @@ function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://fayda-mock-api.onrender.com/add-person', {
+      const response = await fetch(`${API_BASE}/add-person`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': 'Fayda-Secure-2024' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
-      if (response.ok) {
-        alert('ተመዝግቧል!');
+      const result = await response.json();
+      if (result.success) {
+        alert(`ተመዝግቧል! መታወቂያ ቁጥር፡ ${result.fayda_id}`);
         setIsAdmin(false);
-        setFaydaId(formData.fayda_id);
-        handleVerify();
+        handleVerify(result.fayda_id);
       }
-    } catch (err) { alert('ስህተት!'); } finally { setLoading(false); }
+    } catch (err) {
+      alert('የሰርቨር ስህተት!');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!isLoggedIn) {
-    return (
-      <div className="login-container">
-        <div className="login-card scale-in">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Flag_of_Ethiopia_%281975%E2%80%931987%29.svg/250px-Flag_of_Ethiopia_%281975%E2%80%931987%29.svg.png" />
-          <h2>Fayda Verifier Login</h2>
-          <form onSubmit={handleLogin}>
-            <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} required />
-            <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
-            <button type="submit">Sign In</button>
-          </form>
-        </div>
-      </div>
-    );
-  }
+  // --- የፍለጋ ተግባር (Search Logic) ---
+  const filteredUsers = allUsers.filter(user => 
+    user.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    user.fayda_id?.includes(searchTerm)
+  );
 
   return (
     <div className="app-layout">
       <nav className="top-nav">
-        <div className="nav-brand">
-          <img src="https://play-lh.googleusercontent.com/tx1qrpGe0b6uBTadJqLqF64_HW-ehqnH_00J5L5CxjtDPu84eDgnDvSD5d9OTHe3Suw" height="30" alt="Logo" />
-          <span>Fayda e-KYC Portal</span>
-        </div>
+        <div className="nav-brand"><span>Fayda e-KYC Portal</span></div>
         <div className="nav-actions">
-          <button className="admin-btn" onClick={() => setIsAdmin(!isAdmin)}>
-            {isAdmin ? '🔍 Verify Mode' : '⚙️ Admin Mode'}
-          </button>
-          <button className="logout-btn" onClick={handleLogout}>Logout</button>
+          <button onClick={() => setIsAdmin(!isAdmin)}>{isAdmin ? '🔍 Verify Mode' : '⚙️ Admin Mode'}</button>
+          <button onClick={() => { localStorage.removeItem('userToken'); setIsLoggedIn(false); }}>Logout</button>
         </div>
       </nav>
 
       <div className="modern-app">
         <div className="glass-panel">
-          <header className="hero-header">
-            <div className="ethio-stripe"></div>
-            <h1>National e-ID Verifier</h1>
-            <p>{isAdmin ? "Register New Citizen" : "Secure Digital Identity Verification"}</p>
-          </header>
-
           {!isAdmin ? (
             <div className="verification-section">
               <div className="input-group">
-                <div className="input-wrapper">
-                  <span className="input-icon">🆔</span>
-                  <input type="text" placeholder="0000 0000 0000" value={faydaId} onChange={handleInputChange} />
-                </div>
-                <button onClick={handleVerify}>Verify Identity</button>
+                <input type="text" placeholder="Enter Fayda ID" value={faydaId} onChange={(e) => setFaydaId(e.target.value)} />
+                <button onClick={() => handleVerify()} disabled={loading}>Verify</button>
               </div>
 
               {error && <div className="modern-error">{error}</div>}
 
               {userData && (
                 <div className="modern-card scale-in">
-                  <div className="verification-stamp">VERIFIED</div>
                   <div className="card-content">
-                    <img src={userData.photo} alt="Profile" className="modern-photo" />
+                    <img src={userData.photo} alt="User" className="modern-photo" />
                     <div className="user-info">
-                      <h3>{userData.fullName}</h3>
-                      <p className="fayda-num">{userData.fayda_id}</p>
-                      <p>{userData.address}</p>
+                      <h3>{userData.fullname}</h3>
+                      <p><strong>ID:</strong> {userData.fayda_id}</p>
+                      <p><strong>Address:</strong> {userData.address}</p>
+                      <span className="status-badge">{userData.status}</span>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* All Users Button */}
               <div className="all-users-section">
                 <button className="fetch-btn" onClick={fetchAllUsers}>
-                  📊 {showTable ? 'Hide Citizens List' : 'View All Registered Citizens'}
+                  {showTable ? 'Refresh List' : '📊 View All Citizens'}
                 </button>
+
                 {showTable && (
                   <div className="table-container scale-in">
+                    <input 
+                      type="text" 
+                      placeholder="በስም ወይም በID ይፈልጉ..." 
+                      className="search-bar"
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                     <table className="modern-table">
                       <thead>
-                        <tr><th>Photo</th><th>Name</th><th>Fayda ID</th><th>Status</th></tr>
+                        <tr><th>Name</th><th>Fayda ID</th><th>Action</th></tr>
                       </thead>
                       <tbody>
-                        {allUsers.map((user, index) => (
-                          <tr key={index} onClick={() => {setFaydaId(user.fayda_id); setShowTable(false);}}>
-                            <td><img src={user.photo} width="30" style={{borderRadius: '50%'}} /></td>
-                            <td>{user.fullName}</td>
+                        {filteredUsers.map((user, i) => (
+                          <tr key={i}>
+                            <td onClick={() => {setFaydaId(user.fayda_id); setShowTable(false); handleVerify(user.fayda_id);}} style={{cursor:'pointer'}}>
+                              {user.fullname}
+                            </td>
                             <td>{user.fayda_id}</td>
-                            <td><span className="status-badge">Active</span></td>
+                            <td>
+                              <button className="edit-btn" onClick={() => handleUpdate(user)}>📝 Edit</button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -231,25 +221,16 @@ function App() {
             </div>
           ) : (
             <div className="admin-panel scale-in">
+              <h3>Register New Citizen</h3>
               <form onSubmit={handleAdminAction} className="admin-form">
-                <input type="text" placeholder="Fayda ID" required onChange={e => setFormData({...formData, fayda_id: e.target.value})} />
                 <input type="text" placeholder="Full Name" required onChange={e => setFormData({...formData, fullName: e.target.value})} />
+                <input type="email" placeholder="Email Address" required onChange={e => setFormData({...formData, email: e.target.value})} />
+                <input type="date" required onChange={e => setFormData({...formData, dob: e.target.value})} />
                 <input type="text" placeholder="Address" required onChange={e => setFormData({...formData, address: e.target.value})} />
-                <button type="submit" className="save-btn">Register Citizen</button>
+                <button type="submit" disabled={loading}>Register Citizen</button>
               </form>
             </div>
           )}
-        </div>
-
-        {/* History Sidebar */}
-        <div className="history-glass">
-          <h3>Recent Activity</h3>
-          {history.map((user, i) => (
-            <div key={i} className="history-card" onClick={() => setFaydaId(user.fayda_id)}>
-               <p>{user.fullName}</p>
-               <small>{user.fayda_id}</small>
-            </div>
-          ))}
         </div>
       </div>
     </div>
