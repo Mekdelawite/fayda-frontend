@@ -1,227 +1,185 @@
-/* --- Modern & Amazing App Style --- */
+/* --- Ultra-Modern Luxury e-KYC Theme --- */
 :root {
-  --primary: #0052a1;
-  --primary-dark: #003366;
-  --accent: #feb80a; /* Ethio gold */
-  --success: #2e7d32;
-  --error: #d32f2f;
-  --glass: rgba(255, 255, 255, 0.85);
-  --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --bg-deep: #0a0e17; /* በጣም ጥቁር ሰማያዊ */
+  --card-bg: rgba(23, 28, 41, 0.8);
+  --primary-glow: #00d2ff;
+  --secondary-glow: #3a7bd5;
+  --accent-gold: #ffcc33;
+  --text-main: #e0e6ed;
+  --text-dim: #94a3b8;
+  --success-neon: #00f2fe;
 }
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: linear-gradient(135deg, #0052a1 0%, #009688 100%);
-  background-attachment: fixed;
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg-deep);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(58, 123, 213, 0.05) 0%, transparent 20%);
+  color: var(--text-main);
   min-height: 100vh;
-  color: #333;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Glass Panel Effect */
+/* --- Glassmorphism Card Container --- */
 .glass-panel {
-  background: var(--glass);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-  padding: 30px;
-  max-width: 900px;
-  margin: 40px auto;
-  transition: transform 0.3s ease;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 850px;
+  margin: 60px auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* Navigation */
+/* --- Navigation --- */
 .top-nav {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 15px 50px;
+  padding: 20px 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: white;
-  backdrop-filter: blur(5px);
+  background: rgba(10, 14, 23, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .nav-brand span {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: 1px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--primary-glow), var(--secondary-glow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Buttons */
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-
-.print-btn {
-  background: var(--primary);
-  color: white;
-  margin-top: 15px;
-}
-
-.fetch-btn {
-  background: white;
-  color: var(--primary);
-  border: 2px solid var(--primary);
-  margin-top: 20px;
-  width: 100%;
-}
-
-/* Inputs */
+/* --- Futuristic Inputs --- */
 input {
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0;
-  border: 2px solid #eee;
-  border-radius: 12px;
-  font-size: 1rem;
-  box-sizing: border-box;
-  transition: border-color 0.3s;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px 20px;
+  border-radius: 14px;
+  color: white;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
 }
 
 input:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: var(--primary-glow);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
 }
 
-/* ID Card Styles */
+/* --- Glow Buttons --- */
+button {
+  background: linear-gradient(135deg, var(--secondary-glow), var(--primary-glow));
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+button:hover {
+  filter: brightness(1.2);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* --- Verification Identity Card --- */
 .modern-card {
-  display: flex;
-  background: white;
+  background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 20px;
-  padding: 25px;
-  margin: 20px 0;
-  border-left: 10px solid var(--accent);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-top: 30px;
 }
 
 .modern-photo {
-  width: 150px;
-  height: 150px;
-  border-radius: 15px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%; /* ክብ ሲሆን የበለጠ ውበት አለው */
+  border: 3px solid var(--primary-glow);
+  padding: 5px;
   object-fit: cover;
-  margin-right: 25px;
-  border: 3px solid #eee;
 }
 
-.status-badge {
-  background: #e8f5e9;
-  color: var(--success);
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 700;
+.user-info h3 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: white;
 }
 
-/* --- Real ID Card Design for Print --- */
+.user-info p {
+  color: var(--text-dim);
+  margin: 5px 0;
+}
+
+/* --- Print ID Card (The "Wow" Factor) --- */
 .id-card-to-print {
-  width: 400px;
-  background: #fff;
-  background-image: radial-gradient(#eee 1px, transparent 1px);
-  background-size: 20px 20px;
-  border: 2px solid var(--primary);
-  border-radius: 15px;
-  padding: 20px;
-  margin: 30px auto;
-  position: relative;
-  color: #000;
-  display: block; /* ስክሪን ላይ እንዲታይ */
+  background: white;
+  color: #1a1a1a;
+  width: 380px;
+  border-radius: 16px;
+  padding: 25px;
+  border: 1px solid #ddd;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 
-.id-card-header {
-  border-bottom: 2px solid var(--primary);
-  text-align: center;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+.id-card-header h4 {
+  color: #003366;
+  border-bottom: 2px solid #feb80a;
+  display: inline-block;
+  padding-bottom: 4px;
 }
-
-.id-card-header h4 { margin: 0; font-size: 14px; color: var(--primary); }
-
-.id-card-body { display: flex; gap: 20px; }
-
-.id-photo-small {
-  width: 110px;
-  height: 110px;
-  border-radius: 10px;
-  border: 2px solid #ccc;
-}
-
-.id-details p { margin: 5px 0; font-size: 13px; line-height: 1.2; }
 
 .id-number-tag {
-  background: #f4f4f4;
-  padding: 5px;
-  font-family: 'Courier New', Courier, monospace;
-  font-weight: bold;
-  border: 1px dashed #999;
-  display: inline-block;
-  margin-top: 10px;
+  color: #d32f2f;
+  font-weight: 800;
+  font-family: 'Monaco', monospace;
+  background: #fdf2f2;
+  padding: 4px 10px;
+  border-radius: 6px;
 }
 
-/* Table Style */
-.table-container {
-  overflow-x: auto;
-  margin-top: 20px;
-}
-
+/* --- Table Style --- */
 .modern-table {
   width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
+  border-spacing: 0 10px;
+  border-collapse: separate;
 }
 
-.modern-table th {
-  background: var(--primary);
-  color: white;
-  padding: 15px;
-  text-align: left;
+.modern-table tr {
+  background: rgba(255, 255, 255, 0.02);
+  transition: 0.3s;
+}
+
+.modern-table tr:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .modern-table td {
   padding: 15px;
-  border-bottom: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.modern-table tr:hover {
-  background-color: #f9f9f9;
+.modern-table td:first-child { border-radius: 12px 0 0 12px; border-left: 1px solid rgba(255, 255, 255, 0.05); }
+.modern-table td:last-child { border-radius: 0 12px 12px 0; border-right: 1px solid rgba(255, 255, 255, 0.05); }
+
+/* --- Animations --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- PRINT LOGIC --- */
-@media print {
-  body * { visibility: hidden; }
-  .id-card-to-print, .id-card-to-print * {
-    visibility: visible;
-  }
-  .id-card-to-print {
-    position: fixed;
-    left: 50%;
-    top: 20%;
-    transform: translateX(-50%);
-    box-shadow: none;
-    border: 1px solid #000;
-  }
-}
-
-/* Animations */
-.scale-in {
-  animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
+.scale-in { animation: fadeIn 0.5s ease forward; }
