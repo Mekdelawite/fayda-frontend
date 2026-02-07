@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-
+const convertToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => resolve(fileReader.result);
+    fileReader.onerror = (error) => reject(error);
+  });
+};
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
@@ -28,7 +35,11 @@ function App() {
     const token = localStorage.getItem('userToken');
     if (token) setIsLoggedIn(true);
   }, []);
-
+const handleFileUpload = async (e) => {
+  const file = e.target.files[0];
+  const base64 = await convertToBase64(file);
+  setFormData({ ...formData, photo: base64 });
+};
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -253,16 +264,32 @@ function App() {
               </div>
             </div>
           ) : (
-            <div className="admin-panel scale-in">
-              <h3>Register New Citizen</h3>
-              <form onSubmit={handleAdminAction} className="admin-form">
-                <input type="text" placeholder="Full Name" required onChange={e => setFormData({...formData, fullName: e.target.value})} />
-                <input type="email" placeholder="Email Address" required onChange={e => setFormData({...formData, email: e.target.value})} />
-                <input type="date" required onChange={e => setFormData({...formData, dob: e.target.value})} />
-                <input type="text" placeholder="Address" required onChange={e => setFormData({...formData, address: e.target.value})} />
-                <button type="submit" disabled={loading}>Register Citizen</button>
-              </form>
-            </div>
+           // በ Admin Panel ክፍል ውስጥ ያለውን ፎርም በዚህ ተካው
+<div className="admin-panel scale-in">
+  <h3>Register New Citizen</h3>
+  <form onSubmit={handleAdminAction} className="admin-form">
+    <input type="text" placeholder="Full Name" required onChange={e => setFormData({...formData, fullName: e.target.value})} />
+    <input type="email" placeholder="Email Address" required onChange={e => setFormData({...formData, email: e.target.value})} />
+    <input type="date" required onChange={e => setFormData({...formData, dob: e.target.value})} />
+    <input type="text" placeholder="Address" required onChange={e => setFormData({...formData, address: e.target.value})} />
+    
+    <div className="file-upload-group">
+      <label>Citizen Identification Photo</label>
+      <input type="file" accept="image/*" onChange={handleFileUpload} required />
+      
+      {formData.photo && !formData.photo.includes('pravatar') && (
+        <div className="photo-preview-container">
+          <img src={formData.photo} alt="Preview" className="preview-img" />
+          <span className="preview-text">✓ Photo Selected</span>
+        </div>
+      )}
+    </div>
+
+    <button type="submit" disabled={loading}>
+      {loading ? 'Processing...' : '🚀 Register Citizen'}
+    </button>
+  </form>
+</div>
           )}
         </div>
       </div>
