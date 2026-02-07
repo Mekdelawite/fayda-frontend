@@ -187,27 +187,30 @@ function App() {
        </div>
     </div>
 
-    {/* ለህትመት የሚዘጋጀው ትክክለኛው መታወቂያ (በስክሪን ላይ ላይታይ ይችላል) */}
-    <div className="id-card-to-print" style={{marginTop: '20px'}}>
-      <div className="id-card-header">
-        <h4>FEDERAL DEMOCRATIC REPUBLIC OF ETHIOPIA</h4>
-        <small>National Digital ID Card</small>
-      </div>
-      <div className="id-card-body">
-        <img src={userData.photo} className="id-photo-small" alt="id-pic" />
-        <div className="id-details">
-          <p><strong>Name:</strong> {userData.fullname}</p>
-          <p><strong>DOB:</strong> {new Date(userData.dob).toLocaleDateString()}</p>
-          <p><strong>Address:</strong> {userData.address}</p>
-          <p className="id-number-tag">{userData.fayda_id}</p>
-        </div>
-      </div>
-      <div style={{textAlign:'right', marginTop:'10px'}}>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data={userData.fayda_id}" alt="qr" />
-      </div>
+   {/* ለህትመት የሚዘጋጀው መታወቂያ */}
+<div className="id-card-to-print">
+  <div className="id-card-header">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/120px-Emblem_of_Ethiopia.svg.png" alt="Emblem" />
+    <div>
+      <h4>FEDERAL DEMOCRATIC REPUBLIC OF ETHIOPIA</h4>
+      <h4>NATIONAL DIGITAL ID (FAYDA)</h4>
     </div>
   </div>
-)}
+  <div className="id-card-body">
+    <img src={userData.photo} className="id-photo-small" alt="id-pic" />
+    <div className="id-details">
+      <p><span className="label">FULL NAME</span> <strong>{userData.fullname}</strong></p>
+      <p><span className="label">DATE OF BIRTH</span> <strong>{userData.dob ? new Date(userData.dob).toLocaleDateString() : 'N/A'}</strong></p>
+      <p><span className="label">GENDER</span> <strong>M/F</strong></p>
+      <p><span className="label">RESIDENCE</span> <strong>{userData.address}</strong></p>
+      <div className="id-number-tag">{userData.fayda_id}</div>
+    </div>
+  </div>
+  <div className="qr-code-id">
+    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${userData.fayda_id}`} alt="qr" />
+  </div>
+  <div className="id-card-footer"></div>
+</div>
               <div className="all-users-section">
                 <button className="fetch-btn" onClick={fetchAllUsers}>
                   {showTable ? 'Refresh List' : '📊 View All Citizens'}
