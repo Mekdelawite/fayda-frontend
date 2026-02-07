@@ -1,56 +1,107 @@
-/* --- Global Styles --- */
+/* --- Ultra-Modern e-KYC Portal CSS --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
 :root {
-  --bg-deep: #0a0e17;
-  --card-bg: rgba(23, 28, 41, 0.95);
-  --primary-glow: #00d2ff;
-  --ethio-yellow: #ffcc33;
+  --bg-color: #05070a;
+  --glass-bg: rgba(17, 25, 40, 0.85);
+  --primary: #00d2ff;
+  --secondary: #3a7bd5;
+  --text-white: #f8fafc;
+  --ethio-gold: #ffcc33;
 }
 
 body {
   margin: 0;
-  background-color: var(--bg-deep);
-  color: white;
   font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 210, 255, 0.15) 0, transparent 50%), 
+    radial-gradient(at 100% 100%, rgba(58, 123, 213, 0.15) 0, transparent 50%);
+  color: var(--text-white);
+  min-height: 100vh;
 }
 
-.glass-panel {
-  background: var(--card-bg);
-  padding: 40px;
-  border-radius: 25px;
-  max-width: 850px;
-  margin: 40px auto;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-/* Button & Actions Spacing - እዚህ ጋር ነው ክፍተቱ የተፈጠረው */
-.nav-actions, .input-group, .user-actions {
-  display: flex !important;
-  gap: 20px !important; /* በተኖቹ መካከል 20px ክፍተት */
+/* --- Login Screen --- */
+.login-screen {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  margin-top: 15px;
 }
+
+.login-form {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  padding: 50px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+}
+
+.login-form h2 { font-size: 2rem; margin-bottom: 30px; background: linear-gradient(to right, #00d2ff, #3a7bd5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* --- Global Elements --- */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 40px;
+  max-width: 900px;
+  margin: 40px auto;
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  box-sizing: border-box;
+}
+
+input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
 
 button {
   cursor: pointer;
-  padding: 12px 20px;
-  border-radius: 10px;
+  padding: 14px 28px;
+  border-radius: 12px;
   border: none;
-  font-weight: bold;
-  transition: 0.3s;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: 0.4s;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* --- Professional Fayda ID Print View --- */
+button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 210, 255, 0.4); }
+
+.nav-actions, .input-group, .user-actions {
+  display: flex !important;
+  gap: 20px !important; /* ይህ ነው ክፍተቱን የሚፈጥረው */
+  margin: 20px 0;
+}
+
+/* --- Professional Fayda ID Card --- */
 .id-card-to-print {
   width: 450px;
   height: 270px;
   background: white;
   border-radius: 15px;
-  margin: 40px auto;
+  margin: 30px auto;
   position: relative;
   color: #1a1a1a;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
 
 .id-card-header {
@@ -60,51 +111,38 @@ button {
   display: flex;
   align-items: center;
   gap: 15px;
-  border-bottom: 4px solid var(--ethio-yellow);
+  border-bottom: 4px solid var(--ethio-gold);
 }
 
 .id-card-header img { width: 45px; }
-.id-card-header h4 { margin: 0; font-size: 11px; line-height: 1.2; }
+.id-card-header h4 { margin: 0; font-size: 11px; line-height: 1.2; text-align: left;}
 
-.id-card-body { display: flex; padding: 20px; gap: 20px; }
-.id-photo-small {
-  width: 120px;
-  height: 145px;
-  object-fit: cover;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
+.id-card-body { display: flex; padding: 18px; gap: 18px; }
+.id-photo-small { width: 120px; height: 145px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; }
 
-.id-details { flex: 1; }
-.id-details p { margin: 5px 0; font-size: 13px; }
-.id-details .label { color: #666; font-size: 10px; display: block; }
-.id-number-tag {
-  margin-top: 15px;
-  font-size: 20px;
-  font-weight: 900;
-  color: #1c3d72;
-  letter-spacing: 1.5px;
-}
+.id-details { flex: 1; text-align: left; }
+.id-details p { margin: 4px 0; font-size: 13px; font-weight: 800; }
+.id-details .label { color: #777; font-size: 9px; display: block; font-weight: 400; }
+
+.id-number-tag { margin-top: 15px; font-size: 20px; font-weight: 900; color: #1c3d72; letter-spacing: 1.5px; }
 
 .qr-code-id { position: absolute; bottom: 20px; right: 20px; }
+
 .id-card-footer {
   position: absolute;
   bottom: 0; width: 100%; height: 8px;
   background: linear-gradient(90deg, #28a745 33%, #ffcc33 33%, #ffcc33 66%, #ff3b30 66%);
 }
 
-/* Verification Section UI */
-.modern-card {
-  background: rgba(255,255,255,0.05);
-  padding: 25px;
-  border-radius: 20px;
-  margin-bottom: 30px;
-}
-.card-content { display: flex; gap: 30px; align-items: center; }
-.modern-photo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--primary-glow); }
-
 @media print {
   body * { visibility: hidden; }
   .id-card-to-print, .id-card-to-print * { visibility: visible; }
-  .id-card-to-print { position: fixed; left: 0; top: 0; box-shadow: none; border: none; }
+  .id-card-to-print { position: fixed; left: 0; top: 0; margin: 0; box-shadow: none; border: none; }
 }
+
+/* --- Nav & Animations --- */
+.top-nav { padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); }
+.nav-brand span { font-weight: 800; font-size: 1.5rem; letter-spacing: 1px; color: var(--primary); }
+
+.scale-in { animation: scaleIn 0.5s ease-out; }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
