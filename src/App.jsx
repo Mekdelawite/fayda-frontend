@@ -37,8 +37,12 @@ function App() {
   }, []);
 const handleFileUpload = async (e) => {
   const file = e.target.files[0];
-  const base64 = await convertToBase64(file);
-  setFormData({ ...formData, photo: base64 });
+  if (file) {
+    setLoading(true);
+    const compressedBase64 = await resizeAndConvert(file);
+    setFormData({ ...formData, photo: compressedBase64 });
+    setLoading(false);
+  }
 };
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -155,7 +159,31 @@ const handleFileUpload = async (e) => {
     user.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) || 
     user.fayda_id?.includes(searchTerm)
   );
+const resizeAndConvert = (file) => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 400; // የምስሉን ስፋት ወደ 400px ዝቅ ያደርገዋል
+        const scaleSize = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scaleSize;
 
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // ጥራቱን ወደ 0.7 (70%) ዝቅ በማድረግ መጠኑን በጣም ይቀንሳል
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        resolve(dataUrl);
+      };
+    };
+  });
+};
+  
   // --- Login Screen UI ---
   if (!isLoggedIn) {
     return (
