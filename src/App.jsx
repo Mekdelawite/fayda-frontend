@@ -242,7 +242,7 @@ const resizeAndConvert = (file) => {
 {userData && (
   <div id="print-area" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
     {/* --- REAL FAYDA CARD START --- */}
-    <div style={{ width: '550px', height: '350px', background: 'white', borderRadius: '15px', overflow: 'hidden', position: 'relative', color: 'black', boxShadow: '0 15px 35px rgba(0,0,0,0.5)' }}>
+    <div className="fayda-card" style={{ width: '550px', height: '350px', background: 'white', borderRadius: '15px', overflow: 'hidden', position: 'relative', color: 'black', boxShadow: '0 15px 35px rgba(0,0,0,0.5)', display: 'block' }}>
       
       {/* Header */}
       <div style={{ background: '#1b3e71', padding: '10px 20px', display: 'flex', alignItems: 'center', borderBottom: '4px solid #ffcc33', color: 'white' }}>
@@ -256,7 +256,7 @@ const resizeAndConvert = (file) => {
 
       {/* Body */}
       <div style={{ display: 'flex', padding: '20px', gap: '20px', textAlign: 'left', position: 'relative' }}>
-        {/* Watermark Star */}
+        {/* Watermark Star (ከበስተጀርባ የሚታይ) */}
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: 0.05, zIndex: 0 }}>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/500px-Emblem_of_Ethiopia.svg.png" width="250" alt="star" />
         </div>
@@ -265,47 +265,48 @@ const resizeAndConvert = (file) => {
         
         <div style={{ flex: 1, zIndex: 1 }}>
           <div style={{ marginBottom: '8px' }}>
-            <small style={{ color: '#666', fontSize: '9px' }}>ሙሉ ስም / Full Name</small>
+            <small style={{ color: '#666', fontSize: '10px' }}>ሙሉ ስም / Full Name</small>
             <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{userData.fullname}</div>
           </div>
           <div style={{ marginBottom: '8px' }}>
-            <small style={{ color: '#666', fontSize: '9px' }}>የትውልድ ቀን / Date of Birth</small>
-            <div style={{ fontWeight: 'bold', fontSize: '13px' }}>{userData.dob}</div>
+            <small style={{ color: '#666', fontSize: '10px' }}>የትውልድ ቀን / Date of Birth</small>
+            <div style={{ fontWeight: 'bold' }}>{userData.dob}</div>
           </div>
           <div style={{ marginBottom: '8px' }}>
-            <small style={{ color: '#666', fontSize: '9px' }}>ጾታ / SEX</small>
-            <div style={{ fontWeight: 'bold', fontSize: '13px' }}>{userData.gender || 'ወንድ / Male'}</div>
+            <small style={{ color: '#666', fontSize: '10px' }}>ጾታ / SEX</small>
+            <div style={{ fontWeight: 'bold' }}>{userData.gender || 'ወንድ / Male'}</div>
           </div>
           <div>
-            <small style={{ color: '#666', fontSize: '9px' }}>ዜግነት / Citizenship</small>
-            <div style={{ fontWeight: 'bold', fontSize: '13px' }}>ኢትዮጵያ / Ethiopian</div>
+            <small style={{ color: '#666', fontSize: '10px' }}>ዜግነት / Citizenship</small>
+            <div style={{ fontWeight: 'bold' }}>ኢትዮጵያ / Ethiopian</div>
           </div>
         </div>
 
-        {/* --- QR Code & Signature Section --- */}
-        <div style={{ zIndex: 1, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+        {/* --- QR Code, Signature & Stamp Section --- */}
+        <div style={{ zIndex: 1, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {/* QR Code */}
           <img 
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=FaydaID:${userData.fayda_id}%0AName:${userData.fullname}`} 
-            alt="QR" 
-            style={{ border: '1px solid #eee', padding: '3px', background: 'white' }}
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=75x75&data=FaydaID:${userData.fayda_id}%0AName:${userData.fullname}`} 
+            alt="QR Code" 
+            style={{ border: '1px solid #eee', padding: '3px', background: 'white', marginBottom: '10px' }}
           />
           
-          {/* Digital Signature */}
-          <div style={{ marginTop: '10px', position: 'relative' }}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Signature_of_Zuzana_Caputova.svg" width="80" style={{ opacity: 0.8, filter: 'contrast(150%)' }} alt="sign" />
-            <div style={{ fontSize: '8px', borderTop: '1px solid #ccc', paddingTop: '2px', color: '#444' }}>Registrar General</div>
-            {/* Stamp (ማህተም) */}
-            <div style={{ position: 'absolute', top: '-15px', left: '-10px', opacity: 0.3 }}>
-                <div style={{ width: '50px', height: '50px', border: '2px solid red', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'red', fontSize: '8px', transform: 'rotate(-20deg)', fontWeight: 'bold' }}>
-                    FAYDA<br/>OFFICIAL
-                </div>
-            </div>
+          {/* Signature & Stamp Area */}
+          <div style={{ position: 'relative', marginTop: '5px' }}>
+             {/* Signature Image */}
+             <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Signature_of_Zuzana_Caputova.svg" width="80" style={{ opacity: 0.8, filter: 'contrast(150%) blue' }} alt="sign" />
+             
+             {/* Official Stamp (ቀይ ማህተም) */}
+             <div style={{ position: 'absolute', top: '-10px', left: '-15px', width: '55px', height: '55px', border: '2px solid rgba(255, 0, 0, 0.4)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255, 0, 0, 0.4)', fontSize: '7px', fontWeight: 'bold', transform: 'rotate(-25deg)', pointerEvents: 'none' }}>
+                <div style={{ textAlign: 'center' }}>FAYDA<br/>OFFICIAL</div>
+             </div>
+             
+             <div style={{ fontSize: '8px', borderTop: '1px solid #ccc', marginTop: '2px', color: '#555', fontWeight: 'bold' }}>Registrar General</div>
           </div>
         </div>
       </div>
 
-      {/* Footer */}
+      {/* Footer (FCN Number) */}
       <div style={{ position: 'absolute', bottom: '60px', width: '100%', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ fontSize: '18px', fontWeight: 'bold' }}><span style={{ color: '#b45309' }}>FCN</span> {userData.fayda_id}</div>
         <div style={{ color: '#059669', textAlign: 'right', fontWeight: 'bold' }}>
@@ -313,6 +314,17 @@ const resizeAndConvert = (file) => {
             Digital Copy
         </div>
       </div>
+
+      {/* Barcode Area */}
+      <div style={{ position: 'absolute', bottom: '5px', width: '100%', textAlign: 'center' }}>
+        <img src={`https://bwipjs-cdn.micr.be/?bcid=code128&text=${userData.fayda_id}&scale=2&height=8`} style={{ width: '80%', height: '35px' }} alt="barcode" />
+        <div style={{ fontSize: '10px', fontFamily: 'monospace' }}>{userData.fayda_id}</div>
+      </div>
+    </div>
+
+    <button onClick={() => window.print()} style={{ marginTop: '30px', padding: '12px 25px', borderRadius: '10px', background: '#28a745', border: 'none', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}>🖨️ Print ID Card</button>
+  </div>
+)}
 
       {/* Barcode Area */}
       <div style={{ position: 'absolute', bottom: '5px', width: '100%', textAlign: 'center' }}>
