@@ -170,7 +170,7 @@ function App() {
 
               {error && <div className="modern-error">{error}</div>}
 
-              // Verification Card ውስጥ ይህንን ጨምር
+              
 {userData && (
   <div className="verification-container">
     <div className="modern-card scale-in">
