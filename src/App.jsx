@@ -145,23 +145,25 @@ function App() {
     user.fayda_id?.includes(searchTerm)
   );
 
+  // --- Login Screen UI ---
   if (!isLoggedIn) {
     return (
       <div className="login-screen">
-        <form onSubmit={handleLogin} className="glass-panel scale-in">
+        <form onSubmit={handleLogin} className="login-form scale-in">
           <h2>Fayda Login</h2>
-          <input type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} required />
-          <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} required />
+          <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} required />
+          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
           <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
         </form>
       </div>
     );
   }
 
+  // --- Main App UI ---
   return (
     <div className="app-layout">
       <nav className="top-nav">
-        <div className="nav-brand"><span>Fayda e-KYC Portal</span></div>
+        <div className="nav-brand"><span>FAYDA e-KYC Portal</span></div>
         <div className="nav-actions">
           <button onClick={() => setIsAdmin(!isAdmin)}>{isAdmin ? '🔍 Verify Mode' : '⚙️ Admin Mode'}</button>
           <button onClick={() => { localStorage.removeItem('userToken'); setIsLoggedIn(false); }}>Logout</button>
@@ -169,12 +171,12 @@ function App() {
       </nav>
 
       <div className="modern-app">
-        <div className="glass-panel">
+        <div className="glass-panel scale-in">
           {!isAdmin ? (
             <div className="verification-section">
               <div className="input-group">
                 <input type="text" placeholder="Enter Fayda ID" value={faydaId} onChange={(e) => setFaydaId(e.target.value)} />
-                <button onClick={() => handleVerify()} disabled={loading}>Verify</button>
+                <button onClick={() => handleVerify()} disabled={loading}>Verify Identity</button>
               </div>
 
               {error && <div className="modern-error">{error}</div>}
@@ -196,6 +198,7 @@ function App() {
                     </div>
                   </div>
 
+                  {/* Fayda ID Card for Printing */}
                   <div className="id-card-to-print">
                     <div className="id-card-header">
                       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/120px-Emblem_of_Ethiopia.svg.png" alt="Emblem" />
@@ -222,9 +225,12 @@ function App() {
               )}
 
               <div className="all-users-section">
-                <button className="fetch-btn" onClick={fetchAllUsers}>
-                  {showTable ? 'Refresh List' : '📊 View All Citizens'}
-                </button>
+                <div className="user-actions">
+                    <button className="fetch-btn" onClick={fetchAllUsers}>
+                    {showTable ? 'Refresh List' : '📊 View All Citizens'}
+                    </button>
+                </div>
+
                 {showTable && (
                   <div className="table-container scale-in">
                     <input type="text" placeholder="በስም ወይም በID ይፈልጉ..." className="search-bar" onChange={(e) => setSearchTerm(e.target.value)} />
