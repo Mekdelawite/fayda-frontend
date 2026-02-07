@@ -264,25 +264,66 @@ const resizeAndConvert = (file) => {
         <img src={userData.photo} style={{ width: '130px', height: '165px', objectFit: 'cover', borderRadius: '5px', border: '1px solid #ddd', zIndex: 1 }} alt="p" />
         
         <div style={{ flex: 1, zIndex: 1 }}>
-          <div style={{ marginBottom: '10px' }}>
-            <small style={{ color: '#666', fontSize: '10px' }}>ሙሉ ስም / Full Name</small>
-            <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{userData.fullname}</div>
+          <div style={{ marginBottom: '8px' }}>
+            <small style={{ color: '#666', fontSize: '9px' }}>ሙሉ ስም / Full Name</small>
+            <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{userData.fullname}</div>
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <small style={{ color: '#666', fontSize: '10px' }}>የትውልድ ቀን / Date of Birth</small>
-            <div style={{ fontWeight: 'bold' }}>{userData.dob}</div>
+          <div style={{ marginBottom: '8px' }}>
+            <small style={{ color: '#666', fontSize: '9px' }}>የትውልድ ቀን / Date of Birth</small>
+            <div style={{ fontWeight: 'bold', fontSize: '13px' }}>{userData.dob}</div>
           </div>
-          <div style={{ marginBottom: '10px' }}>
-            <small style={{ color: '#666', fontSize: '10px' }}>ጾታ / SEX</small>
-            <div style={{ fontWeight: 'bold' }}>{userData.gender || 'ወንድ / Male'}</div>
+          <div style={{ marginBottom: '8px' }}>
+            <small style={{ color: '#666', fontSize: '9px' }}>ጾታ / SEX</small>
+            <div style={{ fontWeight: 'bold', fontSize: '13px' }}>{userData.gender || 'ወንድ / Male'}</div>
           </div>
           <div>
-            <small style={{ color: '#666', fontSize: '10px' }}>ዜግነት / Citizenship</small>
-            <div style={{ fontWeight: 'bold' }}>ኢትዮጵያ / Ethiopian</div>
+            <small style={{ color: '#666', fontSize: '9px' }}>ዜግነት / Citizenship</small>
+            <div style={{ fontWeight: 'bold', fontSize: '13px' }}>ኢትዮጵያ / Ethiopian</div>
           </div>
         </div>
 
-        {/* --- አዲሱ QR CODE እዚህ ጋር ተጨምሯል --- */}
+        {/* --- QR Code & Signature Section --- */}
+        <div style={{ zIndex: 1, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+          {/* QR Code */}
+          <img 
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=FaydaID:${userData.fayda_id}%0AName:${userData.fullname}`} 
+            alt="QR" 
+            style={{ border: '1px solid #eee', padding: '3px', background: 'white' }}
+          />
+          
+          {/* Digital Signature */}
+          <div style={{ marginTop: '10px', position: 'relative' }}>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Signature_of_Zuzana_Caputova.svg" width="80" style={{ opacity: 0.8, filter: 'contrast(150%)' }} alt="sign" />
+            <div style={{ fontSize: '8px', borderTop: '1px solid #ccc', paddingTop: '2px', color: '#444' }}>Registrar General</div>
+            {/* Stamp (ማህተም) */}
+            <div style={{ position: 'absolute', top: '-15px', left: '-10px', opacity: 0.3 }}>
+                <div style={{ width: '50px', height: '50px', border: '2px solid red', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'red', fontSize: '8px', transform: 'rotate(-20deg)', fontWeight: 'bold' }}>
+                    FAYDA<br/>OFFICIAL
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{ position: 'absolute', bottom: '60px', width: '100%', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ fontSize: '18px', fontWeight: 'bold' }}><span style={{ color: '#b45309' }}>FCN</span> {userData.fayda_id}</div>
+        <div style={{ color: '#059669', textAlign: 'right', fontWeight: 'bold' }}>
+            <img src="https://fayda.ethid.et/img/logo_fayda.png" width="30" style={{ display: 'block', marginLeft: 'auto' }} />
+            Digital Copy
+        </div>
+      </div>
+
+      {/* Barcode Area */}
+      <div style={{ position: 'absolute', bottom: '5px', width: '100%', textAlign: 'center' }}>
+        <img src={`https://bwipjs-cdn.micr.be/?bcid=code128&text=${userData.fayda_id}&scale=2&height=8`} style={{ width: '80%', height: '35px' }} alt="barcode" />
+        <div style={{ fontSize: '10px', fontFamily: 'monospace', letterSpacing: '2px' }}>{userData.fayda_id}</div>
+      </div>
+    </div>
+
+    <button onClick={() => window.print()} style={{ marginTop: '30px', padding: '12px 25px', borderRadius: '10px', background: '#28a745', border: 'none', color: 'white', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 5px 15px rgba(40, 167, 69, 0.3)' }}>🖨️ Print Verified ID</button>
+  </div>
+)}
         <div style={{ zIndex: 1, textAlign: 'center' }}>
           <img 
             src={`https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=FaydaID:${userData.fayda_id}%0AName:${userData.fullname}`} 
