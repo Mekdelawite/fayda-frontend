@@ -1,5 +1,5 @@
 /* --- Ultra-Modern e-KYC Portal CSS --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+Ethiopic:wght@400;700&display=swap');
 
 :root {
   --bg-color: #05070a;
@@ -8,40 +8,22 @@
   --secondary: #3a7bd5;
   --text-white: #f8fafc;
   --ethio-gold: #ffcc33;
+  --id-blue: #1c3d72;
+  --id-green: #28a745;
+  --id-red: #dc3545;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif;
   background-color: var(--bg-color);
   background-image: 
     radial-gradient(at 0% 0%, rgba(0, 210, 255, 0.15) 0, transparent 50%), 
     radial-gradient(at 100% 100%, rgba(58, 123, 213, 0.15) 0, transparent 50%);
   color: var(--text-white);
   min-height: 100vh;
+  overflow-x: hidden; /* እንዳይፈስ */
 }
-
-/* --- Login Screen --- */
-.login-screen {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.login-form {
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  padding: 50px;
-  border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-}
-
-.login-form h2 { font-size: 2rem; margin-bottom: 30px; background: linear-gradient(to right, #00d2ff, #3a7bd5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
 /* --- Global Elements --- */
 .glass-panel {
@@ -52,9 +34,10 @@ body {
   padding: 40px;
   max-width: 900px;
   margin: 40px auto;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.3);
 }
 
-input {
+input, select { /* Select Tag ጨምረናል */
   width: 100%;
   padding: 15px;
   margin: 10px 0;
@@ -63,9 +46,17 @@ input {
   border-radius: 12px;
   color: white;
   box-sizing: border-box;
+  font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif;
+  -webkit-appearance: none; /* ለ Select */
+  -moz-appearance: none; /* ለ Select */
+  appearance: none; /* ለ Select */
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-6.4H18.6c-5%200-9.3%201.8-13.2%205.7l-5.7%205.7a17.6%2017.6%200%200%200%200%2025.2l128%20128c5%204.9%2013.3%204.9%2018.2%200l128-128c5-4.9%205-13.1%200-18.2z%22%2F%3E%3C%2Fsvg%3E'); /* ለ Select */
+  background-repeat: no-repeat; /* ለ Select */
+  background-position: right 15px top 50%; /* ለ Select */
+  background-size: 12px auto; /* ለ Select */
 }
 
-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
 
 button {
   cursor: pointer;
@@ -86,66 +77,36 @@ button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 210,
 
 .nav-actions, .input-group, .user-actions {
   display: flex !important;
-  gap: 20px !important; /* ይህ ነው ክፍተቱን የሚፈጥረው */
+  gap: 20px !important;
   margin: 20px 0;
 }
 
-/* --- Professional Fayda ID Card --- */
-.id-card-to-print {
-  width: 450px;
-  height: 270px;
-  background: white;
-  border-radius: 15px;
-  margin: 30px auto;
-  position: relative;
-  color: #1a1a1a;
-  border: 1px solid #ccc;
-  overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-}
-
-.id-card-header {
-  background: #1c3d72;
-  color: white;
-  padding: 12px;
+/* --- Login Screen --- */
+.login-screen {
+  height: 100vh;
   display: flex;
+  justify-content: center;
   align-items: center;
+}
+
+.login-form {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  padding: 50px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
   gap: 15px;
-  border-bottom: 4px solid var(--ethio-gold);
 }
 
-.id-card-header img { width: 45px; }
-.id-card-header h4 { margin: 0; font-size: 11px; line-height: 1.2; text-align: left;}
+.login-form h2 { font-size: 2rem; margin-bottom: 20px; background: linear-gradient(to right, #00d2ff, #3a7bd5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-.id-card-body { display: flex; padding: 18px; gap: 18px; }
-.id-photo-small { width: 120px; height: 145px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; }
 
-.id-details { flex: 1; text-align: left; }
-.id-details p { margin: 4px 0; font-size: 13px; font-weight: 800; }
-.id-details .label { color: #777; font-size: 9px; display: block; font-weight: 400; }
-
-.id-number-tag { margin-top: 15px; font-size: 20px; font-weight: 900; color: #1c3d72; letter-spacing: 1.5px; }
-
-.qr-code-id { position: absolute; bottom: 20px; right: 20px; }
-
-.id-card-footer {
-  position: absolute;
-  bottom: 0; width: 100%; height: 8px;
-  background: linear-gradient(90deg, #28a745 33%, #ffcc33 33%, #ffcc33 66%, #ff3b30 66%);
-}
-
-@media print {
-  body * { visibility: hidden; }
-  .id-card-to-print, .id-card-to-print * { visibility: visible; }
-  .id-card-to-print { position: fixed; left: 0; top: 0; margin: 0; box-shadow: none; border: none; }
-}
-
-/* --- Nav & Animations --- */
-.top-nav { padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); }
-.nav-brand span { font-weight: 800; font-size: 1.5rem; letter-spacing: 1px; color: var(--primary); }
-
-.scale-in { animation: scaleIn 0.5s ease-out; }
-@keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 /* --- Admin Panel Styling --- */
 .admin-panel {
   text-align: left;
@@ -248,3 +209,109 @@ input[type="file"]::file-selector-button:hover {
 .admin-form button[type="submit"]:hover {
   box-shadow: 0 10px 20px rgba(40, 167, 69, 0.4);
 }
+
+/* --- Modern User Card (Non-Printable Preview) --- */
+.modern-card {
+  background: rgba(255,255,255,0.05);
+  padding: 25px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+}
+.card-content { display: flex; gap: 30px; align-items: center; }
+.modern-photo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
+.user-info h3 { margin: 0 0 5px 0; font-size: 1.8rem; }
+.user-info p { margin: 0 0 5px 0; font-size: 1.1rem; color: #ccc; }
+.status-badge {
+  background: #28a745;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* --- Fayda ID Card for Printing (Exact Replica) --- */
+.id-card-to-print {
+  width: 600px; /* ስፋቱን ጨምረነዋል */
+  height: 380px; /* ቁመቱን ጨምረነዋል */
+  background: #fdfdfd;
+  border-radius: 15px;
+  margin: 30px auto;
+  position: relative;
+  color: #1a1a1a;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_Ethiopia.svg/120px-Emblem_of_Ethiopia.svg.png');
+  background-repeat: no-repeat;
+  background-position: 70% center; /* ወደ ቀኝ */
+  background-size: 200px; /* መጠኑን አስተካክለናል */
+  background-blend-mode: overlay;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+}
+
+.id-card-header {
+  background: linear-gradient(to right, var(--id-blue), #2a5a9a); /* ሰማያዊ ግራዲየንት */
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 5px solid var(--ethio-gold); /* ከላይ ወርቃማ መስመር */
+}
+
+.id-card-header .eth-emblem { width: 50px; height: auto; margin-right: 15px; }
+
+.id-card-header .header-text { flex-grow: 1; text-align: left; }
+.id-card-header h4 { margin: 0; font-size: 14px; line-height: 1.3; font-weight: 700; }
+.id-card-header h4:last-child { font-weight: 400; font-size: 12px; }
+
+.id-card-header .national-id-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 20px;
+}
+.id-card-header .national-id-logo img { width: 40px; height: auto; }
+.id-card-header .national-id-logo span { font-size: 10px; line-height: 1.2; text-align: right; }
+
+
+.id-card-body-print {
+  display: flex;
+  padding: 20px;
+  flex-grow: 1; /* የቀረውን ቦታ እንዲይዝ */
+  position: relative;
+  overflow: hidden; /* Watermark እንዳይወጣ */
+}
+
+.id-photo-large {
+  width: 140px; /* ትልቅ ፎቶ */
+  height: 170px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-right: 25px;
+}
+
+.id-details-print {
+  flex: 1;
+  text-align: left;
+  font-size: 13px;
+}
+
+.id-details-print p { margin: 10px 0; line-height: 1.2; }
+
+.id-details-print .label-am {
+  color: #7a7a7a;
+  font-size: 11px;
+  font-weight: 400;
+  display: inline-block;
+  margin-right: 5px;
+}
+.id-details-print .label-en {
+  color: #7a7a7a;
+  font-size: 11px;
+  font-weight: 400;
+  display: inline-block;
