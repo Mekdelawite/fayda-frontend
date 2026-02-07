@@ -170,20 +170,44 @@ function App() {
 
               {error && <div className="modern-error">{error}</div>}
 
-              {userData && (
-                <div className="modern-card scale-in">
-                  <div className="card-content">
-                    <img src={userData.photo} alt="User" className="modern-photo" />
-                    <div className="user-info">
-                      <h3>{userData.fullname}</h3>
-                      <p><strong>ID:</strong> {userData.fayda_id}</p>
-                      <p><strong>Address:</strong> {userData.address}</p>
-                      <span className="status-badge">{userData.status}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
+              // Verification Card ውስጥ ይህንን ጨምር
+{userData && (
+  <div className="verification-container">
+    <div className="modern-card scale-in">
+       {/* የቀድሞው መረጃ ማሳያ እዚህ አለ... */}
+       <div className="card-content">
+          <img src={userData.photo} alt="User" className="modern-photo" />
+          <div className="user-info">
+            <h3>{userData.fullname}</h3>
+            <p><strong>ID:</strong> {userData.fayda_id}</p>
+            <button className="print-btn" onClick={() => window.print()}>
+              🖨️ Print ID Card
+            </button>
+          </div>
+       </div>
+    </div>
 
+    {/* ለህትመት የሚዘጋጀው ትክክለኛው መታወቂያ (በስክሪን ላይ ላይታይ ይችላል) */}
+    <div className="id-card-to-print" style={{marginTop: '20px'}}>
+      <div className="id-card-header">
+        <h4>FEDERAL DEMOCRATIC REPUBLIC OF ETHIOPIA</h4>
+        <small>National Digital ID Card</small>
+      </div>
+      <div className="id-card-body">
+        <img src={userData.photo} className="id-photo-small" alt="id-pic" />
+        <div className="id-details">
+          <p><strong>Name:</strong> {userData.fullname}</p>
+          <p><strong>DOB:</strong> {new Date(userData.dob).toLocaleDateString()}</p>
+          <p><strong>Address:</strong> {userData.address}</p>
+          <p className="id-number-tag">{userData.fayda_id}</p>
+        </div>
+      </div>
+      <div style={{textAlign:'right', marginTop:'10px'}}>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data={userData.fayda_id}" alt="qr" />
+      </div>
+    </div>
+  </div>
+)}
               <div className="all-users-section">
                 <button className="fetch-btn" onClick={fetchAllUsers}>
                   {showTable ? 'Refresh List' : '📊 View All Citizens'}
