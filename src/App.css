@@ -1,13 +1,13 @@
-/* --- Ultra-Modern Luxury e-KYC Theme --- */
+/* --- Ultra-Modern & Fayda ID Theme --- */
 :root {
-  --bg-deep: #0a0e17; /* በጣም ጥቁር ሰማያዊ */
-  --card-bg: rgba(23, 28, 41, 0.8);
+  --bg-deep: #0a0e17;
+  --card-bg: rgba(23, 28, 41, 0.9);
   --primary-glow: #00d2ff;
   --secondary-glow: #3a7bd5;
-  --accent-gold: #ffcc33;
+  --ethio-green: #28a745;
+  --ethio-yellow: #ffcc33;
+  --ethio-red: #ff3b30;
   --text-main: #e0e6ed;
-  --text-dim: #94a3b8;
-  --success-neon: #00f2fe;
 }
 
 body {
@@ -15,171 +15,155 @@ body {
   font-family: 'Inter', -apple-system, sans-serif;
   background-color: var(--bg-deep);
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 20%),
-    radial-gradient(circle at 90% 80%, rgba(58, 123, 213, 0.05) 0%, transparent 20%);
+    radial-gradient(circle at 50% -20%, rgba(0, 210, 255, 0.1), transparent 50%),
+    radial-gradient(circle at 50% 120%, rgba(58, 123, 213, 0.1), transparent 50%);
   color: var(--text-main);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
-/* --- Glassmorphism Card Container --- */
+/* Glass Panel */
 .glass-panel {
   background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 24px;
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
   padding: 40px;
-  max-width: 850px;
-  margin: 60px auto;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  max-width: 900px;
+  margin: 50px auto;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
 }
 
-/* --- Navigation --- */
-.top-nav {
-  padding: 20px 60px;
+/* Button & Actions Spacing */
+.nav-actions, .input-group, .user-info {
   display: flex;
-  justify-content: space-between;
+  gap: 15px; /* በተኖቹ እንዳይጣበቁ ክፍተት */
   align-items: center;
-  background: rgba(10, 14, 23, 0.8);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.nav-brand span {
-  font-size: 1.4rem;
-  font-weight: 700;
-  background: linear-gradient(to right, var(--primary-glow), var(--secondary-glow));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.nav-actions button, .input-group button {
+  white-space: nowrap;
 }
 
-/* --- Futuristic Inputs --- */
-input {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 16px 20px;
-  border-radius: 14px;
-  color: white;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  margin-bottom: 15px;
-}
-
-input:focus {
-  outline: none;
-  border-color: var(--primary-glow);
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
-}
-
-/* --- Glow Buttons --- */
 button {
   background: linear-gradient(135deg, var(--secondary-glow), var(--primary-glow));
   color: white;
   border: none;
-  padding: 14px 28px;
-  border-radius: 14px;
+  padding: 12px 24px;
+  border-radius: 12px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
   cursor: pointer;
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 button:hover {
-  filter: brightness(1.2);
-  box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 210, 255, 0.3);
 }
 
-/* --- Verification Identity Card --- */
-.modern-card {
-  background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 20px;
-  padding: 30px;
+/* --- Real Fayda ID Design for Print --- */
+.id-card-to-print {
+  width: 450px;
+  height: 260px;
+  background: #fff;
+  border-radius: 15px;
+  padding: 0;
+  margin: 30px auto;
+  position: relative;
+  color: #333;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  border: 1px solid #ccc;
+}
+
+.id-card-header {
+  background: linear-gradient(90deg, #1c3d72 0%, #2a5298 100%);
+  color: white;
+  padding: 10px;
   display: flex;
   align-items: center;
-  gap: 30px;
-  margin-top: 30px;
+  gap: 10px;
+  border-bottom: 4px solid var(--ethio-yellow);
 }
 
-.modern-photo {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%; /* ክብ ሲሆን የበለጠ ውበት አለው */
-  border: 3px solid var(--primary-glow);
-  padding: 5px;
-  object-fit: cover;
+.id-card-header img {
+  width: 35px;
 }
 
-.user-info h3 {
+.id-card-header div h4 {
   margin: 0;
-  font-size: 1.8rem;
-  color: white;
+  font-size: 11px;
+  letter-spacing: 0.5px;
 }
 
-.user-info p {
-  color: var(--text-dim);
-  margin: 5px 0;
+.id-card-body {
+  display: flex;
+  padding: 15px;
+  gap: 20px;
 }
 
-/* --- Print ID Card (The "Wow" Factor) --- */
-.id-card-to-print {
-  background: white;
-  color: #1a1a1a;
-  width: 380px;
-  border-radius: 16px;
-  padding: 25px;
-  border: 1px solid #ddd;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+.id-photo-small {
+  width: 110px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #999;
 }
 
-.id-card-header h4 {
-  color: #003366;
-  border-bottom: 2px solid #feb80a;
-  display: inline-block;
-  padding-bottom: 4px;
+.id-details {
+  flex: 1;
+}
+
+.id-details p {
+  margin: 4px 0;
+  font-size: 12px;
+}
+
+.id-details .label {
+  color: #666;
+  font-size: 10px;
+  display: block;
 }
 
 .id-number-tag {
-  color: #d32f2f;
+  margin-top: 10px;
+  font-size: 18px;
   font-weight: 800;
-  font-family: 'Monaco', monospace;
-  background: #fdf2f2;
-  padding: 4px 10px;
-  border-radius: 6px;
+  color: #1c3d72;
+  letter-spacing: 2px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
-/* --- Table Style --- */
-.modern-table {
+.id-card-footer {
+  position: absolute;
+  bottom: 0;
   width: 100%;
-  border-spacing: 0 10px;
-  border-collapse: separate;
+  height: 8px;
+  background: linear-gradient(90deg, var(--ethio-green) 33%, var(--ethio-yellow) 33%, var(--ethio-yellow) 66%, var(--ethio-red) 66%);
 }
 
-.modern-table tr {
-  background: rgba(255, 255, 255, 0.02);
-  transition: 0.3s;
+.qr-code-id {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
 }
 
-.modern-table tr:hover {
-  background: rgba(255, 255, 255, 0.05);
+/* Print Overrides */
+@media print {
+  body * { visibility: hidden; }
+  .id-card-to-print, .id-card-to-print * { visibility: visible; }
+  .id-card-to-print {
+    position: absolute;
+    left: 50%;
+    top: 50px;
+    transform: translateX(-50%);
+    box-shadow: none;
+    border: 1px solid #eee;
+  }
 }
 
-.modern-table td {
-  padding: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.modern-table td:first-child { border-radius: 12px 0 0 12px; border-left: 1px solid rgba(255, 255, 255, 0.05); }
-.modern-table td:last-child { border-radius: 0 12px 12px 0; border-right: 1px solid rgba(255, 255, 255, 0.05); }
-
-/* --- Animations --- */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.scale-in { animation: fadeIn 0.5s ease forward; }
+/* Animations */
+.scale-in { animation: fadeIn 0.5s ease-out forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
