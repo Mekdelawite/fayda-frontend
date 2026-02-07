@@ -1,66 +1,250 @@
-/* --- APP LAYOUT --- */
-.app-layout { min-height: 100vh; color: white; }
-.top-nav { display: flex; justify-content: space-between; padding: 20px 50px; background: rgba(0,0,0,0.5); }
-.glass-panel { max-width: 900px; margin: 40px auto; background: rgba(17, 25, 40, 0.8); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+/* --- Ultra-Modern e-KYC Portal CSS --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
-/* --- THE FAYDA CARD --- */
-.fayda-card {
-  width: 550px; height: 350px; background: white !important; border-radius: 15px;
-  position: relative; color: black; margin: 20px auto; overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+:root {
+  --bg-color: #05070a;
+  --glass-bg: rgba(17, 25, 40, 0.85);
+  --primary: #00d2ff;
+  --secondary: #3a7bd5;
+  --text-white: #f8fafc;
+  --ethio-gold: #ffcc33;
 }
 
-.card-header-inner {
-  background: #1b3e71 !important; padding: 10px 20px; display: flex; 
-  align-items: center; border-bottom: 4px solid #ffcc33; color: white;
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 210, 255, 0.15) 0, transparent 50%), 
+    radial-gradient(at 100% 100%, rgba(58, 123, 213, 0.15) 0, transparent 50%);
+  color: var(--text-white);
+  min-height: 100vh;
 }
-.header-text { flex: 1; margin-left: 15px; text-align: left; }
-.amharic-title { font-size: 14px; font-weight: bold; }
-.english-title { font-size: 11px; }
 
-.card-body-inner { display: flex; padding: 20px; gap: 20px; position: relative; z-index: 1; }
-.watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.05; z-index: -1; }
-.card-photo { width: 130px; height: 165px; object-fit: cover; border: 1px solid #ddd; border-radius: 5px; }
-
-.card-info-cols { flex: 1; text-align: left; display: flex; flex-direction: column; gap: 8px; }
-.info-item small { color: #666; font-size: 10px; display: block; }
-.info-item div { font-weight: bold; font-size: 14px; }
-
-.card-auth-section { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.card-qr { border: 1px solid #eee; padding: 3px; background: white; }
-
-/* Signature & Stamp */
-.signature-box { position: relative; width: 100px; text-align: center; }
-.signature-img { width: 80px; filter: contrast(150%) brightness(50%); position: relative; z-index: 5; }
-.official-stamp {
-  position: absolute; top: -5px; left: 10px; width: 55px; height: 55px;
-  border: 2px solid rgba(255, 0, 0, 0.5); border-radius: 50%;
-  color: rgba(255, 0, 0, 0.5); font-size: 7px; font-weight: bold;
-  display: flex; align-items: center; justify-content: center;
-  transform: rotate(-25deg); z-index: 2;
+/* --- Login Screen --- */
+.login-screen {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.registrar-line { font-size: 8px; border-top: 1px solid #000; margin-top: 2px; font-weight: bold; }
 
-.fcn-row { position: absolute; bottom: 60px; width: 90%; left: 5%; display: flex; justify-content: space-between; }
-.fcn-text { font-size: 18px; font-weight: bold; }
-.fcn-text span { color: #b45309; }
-.digital-copy-text { color: #059669; font-weight: bold; font-size: 12px; }
+.login-form {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  padding: 50px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+}
 
-.barcode-row { position: absolute; bottom: 5px; width: 100%; text-align: center; }
-.barcode-row img { width: 80%; height: 30px; }
-.barcode-number { font-size: 10px; font-family: monospace; letter-spacing: 2px; }
+.login-form h2 { font-size: 2rem; margin-bottom: 30px; background: linear-gradient(to right, #00d2ff, #3a7bd5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-/* PRINT RULES */
+/* --- Global Elements --- */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 40px;
+  max-width: 900px;
+  margin: 40px auto;
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  box-sizing: border-box;
+}
+
+input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+
+button {
+  cursor: pointer;
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: 0.4s;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 210, 255, 0.4); }
+
+.nav-actions, .input-group, .user-actions {
+  display: flex !important;
+  gap: 20px !important; /* ይህ ነው ክፍተቱን የሚፈጥረው */
+  margin: 20px 0;
+}
+
+/* --- Professional Fayda ID Card --- */
+.id-card-to-print {
+  width: 450px;
+  height: 270px;
+  background: white;
+  border-radius: 15px;
+  margin: 30px auto;
+  position: relative;
+  color: #1a1a1a;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.id-card-header {
+  background: #1c3d72;
+  color: white;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 4px solid var(--ethio-gold);
+}
+
+.id-card-header img { width: 45px; }
+.id-card-header h4 { margin: 0; font-size: 11px; line-height: 1.2; text-align: left;}
+
+.id-card-body { display: flex; padding: 18px; gap: 18px; }
+.id-photo-small { width: 120px; height: 145px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; }
+
+.id-details { flex: 1; text-align: left; }
+.id-details p { margin: 4px 0; font-size: 13px; font-weight: 800; }
+.id-details .label { color: #777; font-size: 9px; display: block; font-weight: 400; }
+
+.id-number-tag { margin-top: 15px; font-size: 20px; font-weight: 900; color: #1c3d72; letter-spacing: 1.5px; }
+
+.qr-code-id { position: absolute; bottom: 20px; right: 20px; }
+
+.id-card-footer {
+  position: absolute;
+  bottom: 0; width: 100%; height: 8px;
+  background: linear-gradient(90deg, #28a745 33%, #ffcc33 33%, #ffcc33 66%, #ff3b30 66%);
+}
+
 @media print {
-  body * { visibility: hidden; }
-  #print-area, #print-area * { visibility: visible; }
-  #print-area { position: absolute; left: 0; top: 0; width: 100%; display: flex; flex-direction: column; align-items: center; }
-  .print-btn-action { display: none !important; }
-  .fayda-card { box-shadow: none; border: 1px solid #eee; }
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body * { visibility: hidden; }
+  .id-card-to-print, .id-card-to-print * { visibility: visible; }
+  .id-card-to-print { position: fixed; left: 0; top: 0; margin: 0; box-shadow: none; border: none; }
 }
 
-/* UI Components */
-.print-btn-action { margin-top: 20px; background: #28a745; padding: 12px 25px; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; border: none; }
-.modern-table { width: 100%; margin-top: 20px; border-collapse: collapse; background: rgba(255,255,255,0.05); }
-.modern-table th, .modern-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+/* --- Nav & Animations --- */
+.top-nav { padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); }
+.nav-brand span { font-weight: 800; font-size: 1.5rem; letter-spacing: 1px; color: var(--primary); }
+
+.scale-in { animation: scaleIn 0.5s ease-out; }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+/* --- Admin Panel Styling --- */
+.admin-panel {
+  text-align: left;
+  padding: 10px;
+}
+
+.admin-panel h3 {
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 25px;
+  text-align: center;
+  border-bottom: 2px solid rgba(0, 210, 255, 0.2);
+  padding-bottom: 10px;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* File Upload Group */
+.file-upload-group {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  transition: 0.3s;
+}
+
+.file-upload-group:hover {
+  border-color: var(--primary);
+  background: rgba(0, 210, 255, 0.05);
+}
+
+.file-upload-group label {
+  font-weight: 600;
+  color: #ddd;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Custom File Input Styling */
+input[type="file"] {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #888;
+  font-size: 14px;
+}
+
+input[type="file"]::file-selector-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  margin-right: 15px;
+  transition: 0.3s;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Photo Preview */
+.photo-preview-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.preview-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+}
+
+.preview-text {
+  font-size: 12px;
+  color: #28a745;
+  font-weight: bold;
+}
+
+/* Admin Submit Button */
+.admin-form button[type="submit"] {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #28a745, #20c997); /* አረንጓዴ ከለር ለምዝገባ */
+  box-shadow: 0 10px 20px rgba(40, 167, 69, 0.2);
+}
+
+.admin-form button[type="submit"]:hover {
+  box-shadow: 0 10px 20px rgba(40, 167, 69, 0.4);
+}
