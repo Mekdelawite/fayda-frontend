@@ -300,9 +300,9 @@ const resizeAndConvert = (file) => {
     <input type="email" placeholder="Email Address" required onChange={e => setFormData({...formData, email: e.target.value})} />
     <input type="date" required onChange={e => setFormData({...formData, dob: e.target.value})} />
     <input type="text" placeholder="Address" required onChange={e => setFormData({...formData, address: e.target.value})} />
-     <input type="text" placeholder="Phone Number" required onChange={e => setFormData({...formData, address: e.target.value})} />
-     <input type="text" placeholder="Place of birth" required onChange={e => setFormData({...formData, address: e.target.value})} />
-     <input type="text" placeholder="Nationality" required onChange={e => setFormData({...formData, address: e.target.value})} />
+     <input type="text" placeholder="Phone Number" required onChange={e => setFormData({...formData, phoneNumber: e.target.value})} />
+     <input type="text" placeholder="Place of birth" required onChange={e => setFormData({...formData, birthPlace: e.target.value})} />
+     <input type="text" placeholder="Nationality" required onChange={e => setFormData({...formData, Nationality: e.target.value})} />
     <div className="file-upload-group">
       <label>Citizen Identification Photo</label>
       <input type="file" accept="image/*" onChange={handleFileUpload} required />
